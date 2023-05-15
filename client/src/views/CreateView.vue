@@ -1,14 +1,26 @@
 <template>
- <PersonForm/>
+
+  <div>
+    <div>
+      <SideBar/>
+    </div>
+
+    <div>
+      <PersonForm/>
+    </div>
+    
+  </div>
 </template>
 
 <script>
+import SideBar from "../components/SideBar.vue"
 import PersonForm from "../components/PersonForm.vue"
 import router from "../router";
 import axios from "axios";
 
 export default {
   components: {
+    SideBar,
     PersonForm,
   },
 

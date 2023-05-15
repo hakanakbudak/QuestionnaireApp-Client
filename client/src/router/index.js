@@ -55,6 +55,15 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/UpdateView.vue"),
   },
+  {
+    path: "/setting/:id",
+    name: "Setting",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/SettingView.vue"),
+  },
 ];
 
 const router = new VueRouter({
@@ -72,7 +81,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
-
 
 export default router;
