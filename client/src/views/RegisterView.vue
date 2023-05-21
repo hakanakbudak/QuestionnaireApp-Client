@@ -5,42 +5,90 @@
 
     <div class="col-sm-6">
 
-      <div class="registerBody">
+      <div class="register-view-body">
         <h1>Register</h1>
         <form>
-          <!-- Username input -->
-          <div class="form-outline-Register">
-            <p>Email Addres</p>
-            <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
-          </div>
-          <!-- Email input -->
-          <div class="form-outline-Register">
-            <p>Username</p>
-            <input type="email" v-model="form.username" id="form3Example3" placeholder="Enter a valid username" />
-          </div>
-          <!-- Password input -->
-          <div class="form-outline-Register">
-            <p>Password</p>
-            <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
-          </div>
 
-          <div class="text-center text-lg-start mt-4 pt-2">
-            <button type="button" @click="register" class="registerBtn"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="http://localhost:8080/login"
-                class="link-danger">Login</a>
-            </p>
-          </div>
+          <table>
+
+            <tr>
+              <td>
+                <div class="form-outline-Register">
+                  <p>Email Addres</p>
+                  <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
+                </div>
+              </td>
+
+              <td>
+                <div class="form-outline-Register">
+                  <p>Brith Date</p>
+                  <input type="text" v-model="form.userBirthDate" id="form3Example3" placeholder=" Birth Date" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="form-outline-Register">
+                  <p>Username</p>
+                  <input type="text" v-model="form.username" id="form3Example3" placeholder="Enter a valid username" />
+                </div>
+              </td>
+
+              <td>
+                <div class="form-outline-Register">
+                  <p>Job</p>
+                  <input type="text" v-model="form.userJob" id="form3Example3" placeholder=" Job" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="form-outline-Register">
+                  <p>Password</p>
+                  <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
+                </div>
+              </td>
+
+              <td>
+                <div class="form-outline-Register">
+                  <p>City</p>
+                  <input type="text" v-model="form.userCity" id="form3Example4" placeholder="City" />
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="text-center text-lg-start mt-4 pt-2">
+                  <button type="button" @click="register" class="register-button"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
+                  <div class="login-link-text">
+                    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? 
+                    <a href="http://localhost:8080/login"
+                      class="link-danger">Login</a>
+                  </p>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <div class="form-outline-Register">
+                  <p>Education</p>
+                  <input type="text" v-model="form.userEducation" id="form3Example4" placeholder="Education" />
+                </div>
+              </td>
+            </tr>
+
+          </table>
 
         </form>
 
       </div>
     </div>
 
-    <div class="col-sm-3"></div>
-
   </div>
-  
 </template>
   
 <script>
@@ -52,6 +100,10 @@ export default {
         email: "",
         username: "",
         password: "",
+        userBirthDate:"",
+        userJob:"",
+        userCity:"",
+        userEducation:"",
       },
     };
   },
@@ -76,8 +128,11 @@ export default {
           (error) => {
             console.log(error);
           }
-        )},
+        )
+    },
+    
   },
+  
 };
 </script>
 
@@ -95,11 +150,10 @@ input {
   font-weight: 400;
   line-height: 1px;
   margin-left: 100px;
-
 }
 
 h1 {
-  margin-top: 80px;
+  margin-top: 60px;
   margin-left: 130px;
   line-height: 100px;
   color: white;
@@ -108,17 +162,23 @@ h1 {
 p {
   color: white;
   text-align: center;
+  
 }
 
 a {
   color: white;
+  
+}
+
+.login-link-text{
+  margin-left: 100px;
 }
 
 a:hover {
   color: white;
 }
 
-.registerBtn {
+.register-button {
   color: white;
   outline: 0;
   border: 2px solid currentcolor;
@@ -128,10 +188,11 @@ a:hover {
   font-size: 15px;
   font-weight: 600;
   padding: 20px 15px;
+  margin-left: 100px;
   display: inline-block;
 }
 
-.registerBtn:hover {
+.register-button:hover {
   color: black;
   border-color: transparent;
   background-color: white;
@@ -139,24 +200,23 @@ a:hover {
 }
 
 .form-outline-Register {
-  margin-top: 45px;
+  margin-top: 25px;
   line-height: 1px;
   font-size: 15px;
   font-weight: 600;
   color: aliceblue;
 }
 
-.registerBody {
+.register-view-body {
+  width: 700px;
+  height: 480px;
   background-color: rgb(241, 138, 12);
   border-radius: 30px;
   border-color: black;
-  /*padding: 2px 2px;*/
   margin-top: 150px;
   margin-bottom: 20px;
   position: relative;
   margin: auto;
-  width: 400px;
-  height: 520px;
   line-height: 1px;
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
 }

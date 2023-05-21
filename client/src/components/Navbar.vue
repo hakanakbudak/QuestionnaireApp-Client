@@ -5,8 +5,8 @@
 
       <div>
 
-        <button class="navBtn" type="button" @click="homeBtn()">Home</button>
-        <button class="navBtn" type="button" @click="loginBtn()">Login</button>
+        <button class="nav-bar-button" type="button" @click="homePageButton()">Home</button>
+        <button class="nav-bar-button" type="button" @click="loginViewButton()">Login</button>
 
       </div>
     </nav>
@@ -23,13 +23,13 @@ export default {
 
   methods: {
 
-    homeBtn() {
+    homePageButton() {
       router.replace({
         path: "/",
       });
     },
 
-    loginBtn() {
+    loginViewButton() {
       router.replace({
         path: "/login",
       });
@@ -40,14 +40,12 @@ export default {
 
 <style>
 nav {
-  /*background-color: chocolate;
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);*/
   background: linear-gradient(90deg, rgb(2, 9, 121, 1) 20%, rgb(11, 134, 235) 45%, rgb(0, 9, 121, 1) 100%);
   height: 60px;
 
 }
 
-.navBtn {
+.nav-bar-button {
   color: white;
   outline: 0;
   border: 2px solid currentcolor;
@@ -63,11 +61,10 @@ nav {
 
 }
 
-.navBtn:hover {
+.nav-bar-button:hover {
   color: white;
   border-color: transparent;
   background-color: dodgerblue;
   border-radius: 8px;
-
 }
 </style>

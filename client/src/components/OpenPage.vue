@@ -2,11 +2,13 @@
   <div class="open-page">
     <div class="row">
       <div class="col-sm-4"></div>
-      <div class="col-sm-4"><h6>{{ result }}</h6><br></div>
+      <div class="col-sm-4">
+        <h6>{{ result }}</h6><br>
+      </div>
       <div class="col-sm-4"></div>
     </div>
     
-    
+
     <div>
       <PersonList />
     </div>

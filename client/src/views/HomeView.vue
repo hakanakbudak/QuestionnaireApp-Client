@@ -5,9 +5,7 @@
 
       <div class="col-sm-5"><br>
 
-        <div class="searchDiv">
-          <input class="searchBar" type="search" placeholder="Search...">
-        </div><br>
+        
         <br>
 
         <div v-for="person in persons" :key="person._id" class="card my-4">
@@ -17,10 +15,10 @@
 
               <ul class="list-group list-group-vertical">
                 <h5 class="card-title">{{ person.category }}</h5>
-                <li class="list-group-item">{{ person.age }}</li>
-                <li class="list-group-item">{{ person.country }}</li>
-                <li class="list-group-item">{{ person.city }} </li>
-                <li class="list-group-item">{{ person.message }} </li>
+                <li class="list-group-item">{{ person.selectionOne }}</li>
+                <li class="list-group-item">{{ person.selectionTwo }}</li>
+                <li class="list-group-item">{{ person.selectionThree }} </li>
+                <li class="list-group-item">{{ person.question }} </li>
               </ul>
 
             </div>
@@ -88,7 +86,7 @@ export default {
 </script>
 
 <style>
-.searchBar {
+.search-bar {
   width: auto;
   height: auto;
   border-radius: 10px;
@@ -98,7 +96,7 @@ export default {
   margin-top: 10px;
 }
 
-.searchDiv {
+.search-area {
   margin-bottom: 0;
   width: 615px;
   height: 50px;

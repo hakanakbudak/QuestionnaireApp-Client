@@ -5,22 +5,22 @@
 
     <div class="col-sm-6">
 
-      <div class="loginBody">
+      <div class="login-view-body">
         <h1>Login</h1>
         <form>
-          <!-- Email input -->
+
           <div class="form-outline-Login">
             <p>Email Addres</p>
             <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
           </div>
-          <!-- Password input -->
+
           <div class="form-outline-Login">
             <p>Password</p>
             <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
-            <button type="button" @click="login()" class="loginBtn"
+            <button type="button" @click="userLogin()" class="login-button"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
             <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="http://localhost:8080/register"
                 class="link-danger">Register</a>
@@ -35,7 +35,6 @@
     <div class="col-sm-3"></div>
 
   </div>
-
 </template>
   
 <script>
@@ -52,7 +51,7 @@ export default {
     };
   },
   methods: {
-    login() {
+    userLogin() {
       axios
         .post("http://localhost:3000/login", this.form, {
           headers: {
@@ -94,8 +93,6 @@ input {
   font-weight: 400;
   line-height: 1px;
   margin-left: 100px;
-  
-
 }
 
 h1 {
@@ -118,7 +115,7 @@ a:hover {
   color: white;
 }
 
-.loginBtn {
+.login-button {
   color: white;
   outline: 0;
   border: 2px solid currentcolor;
@@ -131,7 +128,7 @@ a:hover {
   display: inline-block;
 }
 
-.loginBtn:hover {
+.login-button:hover {
   color: black;
   border-color: transparent;
   background-color: white;
@@ -146,11 +143,10 @@ a:hover {
   color: aliceblue;
 }
 
-.loginBody {
+.login-view-body {
   background-color: rgb(241, 138, 12);
   border-radius: 30px;
   border-color: black;
-  /*padding: 2px 2px;*/
   margin-top: 150px;
   margin-bottom: 20px;
   position: relative;
@@ -159,6 +155,5 @@ a:hover {
   height: 450px;
   line-height: 1px;
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
-
 }
 </style>

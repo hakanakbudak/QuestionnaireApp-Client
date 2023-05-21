@@ -1,82 +1,19 @@
 <template>
     <div>
-        <!--
-
-            <div>
-                
-                <div class="row">
-                    
-                    <div class="col-sm-3">
-                        <div id="YanMenu" class="sidenav">
-                            
-                            <table class="tableOne">
-                                <tr>
-                                    <td>
-                                        <div style="position: fixed;" id="main" class="openBtn">
-                                            <span style="font-size:30px;cursor:pointer" @click="openNav()">
-                                                
-                                                &#9776; </span>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a href="javascript:void(0)" class="closebtn" @click="closeNav()">
-                                                
-                                                &times;</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                
-                                                <img class="profileImg"
-                                                src="https://www.gentas.com.tr/wp-content/uploads/2021/05/3190-siyah_renk_g483_1250x1000_t3cksofn.jpg">
-                                                <p class="profileUsername">bluesauer</p>
-                                                
-                                            </td>
-                                        </tr>
-                            <tr>
-                                <td>
-                                    <a href="http://localhost:8080/">Home</a>
-                                    <a href="http://localhost:8080/create">Create</a>
-                                    <a href="http://localhost:8080/openpage">List</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <br>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td>
-                                    <button type="button" @click="logout()" class="logBtn">Logout</button>
-                                </td>
-                            </tr>
-                        </table>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    -->
 
         <SideBar />
 
+
+
         <div class="row">
+
             <div class="col-sm-3"></div>
 
             <div class="col-sm-5">
 
-                <div class="searchDiv">
-                    <input class="searchBar" type="search" placeholder="Search...">
+                <div class="search-area">
+                    <input class="search-bar" type="search" placeholder="Search...">
+                    <button type="search" @click="search()" class="search-button">S</button>
                 </div><br>
                 <br>
 
@@ -85,29 +22,60 @@
                     <div class="card">
                         <div class="card-body">
 
-
                             <ul class="list-group list-group-vertical">
-                                <h5 class="card-title">{{ person.category }}</h5>
-                                <li class="list-group-item">{{ person.age }}</li> <button type="button">%555</button>
-                                <li class="list-group-item">{{ person.country }}</li><button type="button">%555</button>
-                                <li class="list-group-item">{{ person.city }} </li><button type="button">%555</button>
-                                <li class="list-group-item">{{ person.message }} </li><button type="button">%555</button>
+
+                                <li class="list-group-item">
+                                    <h2 class="card-title">{{ person.category }}</h2>
+                                    <PopUp />
+                                </li>
+
+                                <li class="list-group-item">
+                                    <h5>{{ person.question }}</h5>
+                                </li>
+
+                                <li class="list-group-item">{{ person.selectionOne }} <br>
+                                    <button id="questionOneButton" class="question-average-button" @click="questionButton()"
+                                        @dblclick="questionCloseButton()" type="button">
+                                        <p id="numberTextOne" class="number-text"> %25 </p>
+                                    </button>
+                                </li>
+
+                                <li class="list-group-item">{{ person.selectionTwo }} <br>
+                                    <button id="questionTwoButton" class="question-average-button" @click="questionButton()"
+                                        @dblclick="questionCloseButton()" type="button">
+                                        <p id="numberTextTwo" class="number-text"> %25 </p>
+                                    </button>
+                                </li>
+
+                                <li class="list-group-item">{{ person.selectionThree }} <br>
+                                    <button id="questionThreeButton" class="question-average-button"
+                                        @click="questionButton()" @dblclick="questionCloseButton()" type="button">
+                                        <p id="numberTextThree" class="number-text"> %50 </p>
+                                    </button>
+                                </li>
                             </ul>
 
                             <br>
 
-                            <button type="button" @click="editPerson(person._id)" class="btn btn-primary"> Edit </button>
-                            <button type="button" @click="removePerson(person._id)" class="btn text-white "
-                                style="background-color: red;">Delete</button>
+                            <button type="button" @click="editPerson(person._id)" class="btn btn-primary"> Edit
+                            </button>
+                            <button type="button" @click="removePerson(person._id)" class="btn btn-danger">Delete</button>
+
+
 
                         </div>
 
                     </div>
 
+
+
                 </div>
 
             </div>
-            <div class="col-sm-3"></div>
+        
+            <div class="col-sm-3">
+
+            </div>
 
         </div>
 
@@ -120,11 +88,13 @@
 import router from "../router";
 import axios from "axios";
 import SideBar from "../components/SideBar.vue"
+import PopUp from "../components/PopUp.vue"
 
 export default {
 
     components: {
-        SideBar
+        SideBar,
+        PopUp,
     },
 
     data() {
@@ -133,9 +103,11 @@ export default {
         }
     },
 
+
     created() {
         this.getPersons()
     },
+
 
     methods: {
         async getPersons() {
@@ -159,14 +131,14 @@ export default {
             }
         },
 
-        editPerson(_id, age, country, city) {
+        editPerson(_id, selectionOne, selectionTwo, selectionThree, category) {
             try {
-                const response = axios.put(`http://localhost:3000/update/${_id}`, { age, country, city })
+                const response = axios.put(`http://localhost:3000/create/${_id}`, { selectionOne, selectionTwo, selectionThree, category })
                 this.response = response.data,
 
                     console.log(response),
                     router.replace({
-                        path: `/update/${_id}`,
+                        path: `/create/${_id}`,
                     });
 
             }
@@ -174,15 +146,27 @@ export default {
                 console.log(error)
             }
         },
+        search() {
 
-        openNav() {
-            document.getElementById("YanMenu").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-        },
+            const searchQuery = document.querySelector(".search-bar").value.toLowerCase(); // Arama sorgusunu al
 
-        closeNav() {
-            document.getElementById("YanMenu").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
+            // Kişiler listesini filtrele ve arama sorgusuyla eşleşen kişileri getir
+            const filteredPersons = this.persons.filter(person => {
+                const category = person.question.toLowerCase();
+                const question = person.question.toLowerCase();
+                const selectionOne = person.selectionOne.toLowerCase();
+                const selectionTwo = person.selectionTwo.toLowerCase();
+                const selectionThree = person.selectionThree.toLowerCase();
+
+                return (
+                    question.includes(searchQuery) || selectionOne.includes(searchQuery) || selectionTwo.includes(searchQuery)
+                    || selectionThree.includes(searchQuery) || category.includes(searchQuery)
+                );
+            });
+
+            // Filtrelenmiş kişileri güncelle
+            this.persons = filteredPersons;
+
         },
 
 
@@ -193,6 +177,26 @@ export default {
             });
         },
 
+        questionButton() {
+            document.getElementById("questionOneButton").style.height = "5px";
+            document.getElementById("questionTwoButton").style.height = "5px";
+            document.getElementById("questionThreeButton").style.height = "5px";
+
+            document.getElementById("numberTextOne").style.visibility = "visible";
+            document.getElementById("numberTextTwo").style.visibility = "visible";
+            document.getElementById("numberTextThree").style.visibility = "visible";
+
+        },
+
+
+        /*
+        questionCloseButton() {
+            document.getElementById("questionOneButton").style.width = "530px";
+            document.getElementById("questionTwoButton").style.width = "530px";
+            document.getElementById("questionThreeButton").style.width = "530px";
+        }
+         */
+
     },
 
 
@@ -201,23 +205,54 @@ export default {
 </script>
 
 <style>
-.searchBar {
-    width: auto;
+.search-bar {
+    width: 540px;
     height: auto;
     border-radius: 10px;
     border-color: black;
     text-align: center;
     margin-left: 10px;
-    margin-top: 6px;
+    margin-top: 9px;
 }
 
-.searchDiv {
+.search-area {
     margin-bottom: 0;
     width: 615px;
     height: 50px;
     background-color: rgba(0, 0, 139, 0.137);
     z-index: 1;
     border-radius: 10px;
+}
+
+.search-button {
+    width: 40px;
+    height: 40px;
+    margin-left: 9px;
+    border-radius: 50px;
+    border-color: dodgerblue;
+}
+
+.question-average-button {
+    width: 530px;
+    height: 34px;
+    background-color: gray;
+    border-color: black;
+    border-width: 1px;
+    transition: 0.5s;
+    visibility: visible;
+
+}
+
+.question-average-button:hover {
+    background-color: rgba(94, 85, 85, 0.493);
+    border-color: black;
+    border-width: 1px;
+    border-radius: 10px;
+}
+
+.number-text {
+    visibility: hidden;
+    margin-top: 3px;
 }
 </style>
 

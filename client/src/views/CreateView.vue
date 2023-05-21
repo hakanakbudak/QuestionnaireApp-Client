@@ -1,14 +1,13 @@
 <template>
-
   <div>
     <div>
-      <SideBar/>
+      <SideBar />
     </div>
 
     <div>
-      <PersonForm/>
+      <PersonForm />
     </div>
-    
+
   </div>
 </template>
 
@@ -27,10 +26,10 @@ export default {
   data() {
     return {
       person: {
-        age: "",
-        country: "",
-        city: "",
-        message: "",
+        selectionOne: "",
+        selectionTwo: "",
+        selectionThree: "",
+        question: "",
       },
     };
   },
@@ -52,6 +51,21 @@ export default {
           }
         );
     },
+
+    updatePerson(_id) {
+      try {
+        const { selectionOne, selectionTwo, selectionThree, question } = this.person
+        const response = axios.put(`http://localhost:3000/create/${_id, selectionOne, selectionTwo, selectionThree, question}`)
+
+        response.then((res) => {
+          this.person = res.data // response'dan gelen veriyi person veri modeline atayın
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+
   },
 
 };
