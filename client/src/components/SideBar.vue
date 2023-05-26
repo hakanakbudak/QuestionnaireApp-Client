@@ -9,7 +9,7 @@
                         <tr>
                             <td>
                                 <div style="position: fixed;" id="main" class="open-side-bar">
-                                    <span style="font-size:30px;cursor:pointer" @click="openSidebar()">
+                                    <span @click="openSidebar()">
 
                                         &#9776;
                                     </span>
@@ -102,7 +102,7 @@ export default {
         logoutButton() {
             localStorage.clear()
             router.replace({
-                path: "/",
+                path: "/login",
             });
         },
     }
@@ -184,6 +184,11 @@ body {
     .side-nav a {
         font-size: 18px;
     }
+}
+
+.open-side-bar{
+    font-size:30px;
+    cursor:pointer;
 }
 
 

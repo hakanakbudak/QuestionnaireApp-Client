@@ -37,11 +37,17 @@ export default {
     create() {
       axios
         .post("http://localhost:3000/create", this.person, {
-
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000/create",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          withCredentials: false,
         })
         .then(
           (response) => {
-            console.log(response);
+            console.log(response.data);
+            localStorage.access_token = response.data;
             router.replace({
               path: "/openpage",
             });

@@ -10,12 +10,12 @@
         <form>
 
           <div class="form-outline-Login">
-            <p>Email Addres</p>
+            <p class="p-text">Email Addres</p>
             <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
           </div>
 
           <div class="form-outline-Login">
-            <p>Password</p>
+            <p class="p-text">Password</p>
             <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
           </div>
 
@@ -55,7 +55,7 @@ export default {
       axios
         .post("http://localhost:3000/login", this.form, {
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "http://localhost:3000/login",
             Accept: "application/json",
             "Content-Type": "application/json",
           },
@@ -102,7 +102,7 @@ h1 {
   color: white;
 }
 
-p {
+.p-text{
   color: white;
   text-align: center;
 }

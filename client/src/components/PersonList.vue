@@ -4,10 +4,12 @@
         <SideBar />
 
 
-
         <div class="row">
 
-            <div class="col-sm-3"></div>
+
+            <div class="col-sm-3">
+                <CommentForm />
+            </div>
 
             <div class="col-sm-5">
 
@@ -31,6 +33,7 @@
 
                                 <li class="list-group-item">
                                     <h5>{{ person.question }}</h5>
+                                    <p class="date-text">{{ currentDate }},{{ currentTime }}</p>
                                 </li>
 
                                 <li class="list-group-item">{{ person.selectionOne }} <br>
@@ -72,21 +75,30 @@
                 </div>
 
             </div>
-        
+
             <div class="col-sm-3">
+                <div>
+                    
+                </div>
+
+                <div>
+                    <div v-for="comments in comment" :key="comments._id">
+                        <div>
+                            <p>{{ comments.comment }}</p>
+                        </div>
+                    </div>
+                    
+                </div>
 
             </div>
-
         </div>
-
-
-
     </div>
 </template>
 <script>
 
 import router from "../router";
 import axios from "axios";
+import CommentForm from "../components/CommentForm.vue"
 import SideBar from "../components/SideBar.vue"
 import PopUp from "../components/PopUp.vue"
 
@@ -95,17 +107,23 @@ export default {
     components: {
         SideBar,
         PopUp,
+        CommentForm,
     },
 
     data() {
         return {
-            persons: []
+            persons: [],
+            comment: [],
+            currentDate: "",
+            currentTime: ""
         }
     },
 
 
     created() {
-        this.getPersons()
+        this.getPersons(),
+            this.getCurrentDateTime(),
+            this.getComment()
     },
 
 
@@ -146,11 +164,21 @@ export default {
                 console.log(error)
             }
         },
+
+        async getComment() {
+            try {
+                const commentResponse = await axios.get('http://localhost:3000/comment')
+                this.comment = commentResponse.data
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
         search() {
 
-            const searchQuery = document.querySelector(".search-bar").value.toLowerCase(); // Arama sorgusunu al
+            const searchQuery = document.querySelector(".search-bar").value.toLowerCase(); // Arama sorgusu
 
-            // Kişiler listesini filtrele ve arama sorgusuyla eşleşen kişileri getir
+            // Listeyi filtrele ve kişileri getir
             const filteredPersons = this.persons.filter(person => {
                 const category = person.question.toLowerCase();
                 const question = person.question.toLowerCase();
@@ -164,7 +192,7 @@ export default {
                 );
             });
 
-            // Filtrelenmiş kişileri güncelle
+            // Filtrenenleri güncelle
             this.persons = filteredPersons;
 
         },
@@ -185,21 +213,18 @@ export default {
             document.getElementById("numberTextOne").style.visibility = "visible";
             document.getElementById("numberTextTwo").style.visibility = "visible";
             document.getElementById("numberTextThree").style.visibility = "visible";
-
         },
 
+        swipeTo() {
+            document.getElementById("swipe-button").style.height = "320px";
+        },
 
-        /*
-        questionCloseButton() {
-            document.getElementById("questionOneButton").style.width = "530px";
-            document.getElementById("questionTwoButton").style.width = "530px";
-            document.getElementById("questionThreeButton").style.width = "530px";
-        }
-         */
-
+        getCurrentDateTime() {
+            const date = new Date();
+            this.currentDate = date.toDateString();
+            this.currentTime = date.toLocaleTimeString();
+        },
     },
-
-
 };
 
 </script>
@@ -253,6 +278,10 @@ export default {
 .number-text {
     visibility: hidden;
     margin-top: 3px;
+}
+
+.date-text {
+    font-size: 10px;
 }
 </style>
 

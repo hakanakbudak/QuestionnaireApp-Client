@@ -21,8 +21,8 @@
 
               <td>
                 <div class="form-outline-Register">
-                  <p>Brith Date</p>
-                  <input type="text" v-model="form.userBirthDate" id="form3Example3" placeholder=" Birth Date" />
+                  <p>Education</p>
+                  <input type="text" v-model="form.userEducation" id="form3Example4" placeholder="Education" />
                 </div>
               </td>
             </tr>
@@ -65,18 +65,17 @@
                   <button type="button" @click="register" class="register-button"
                     style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
                   <div class="login-link-text">
-                    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? 
-                    <a href="http://localhost:8080/login"
-                      class="link-danger">Login</a>
-                  </p>
+                    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
+                      <a href="http://localhost:8080/login" class="link-danger">Login</a>
+                    </p>
                   </div>
                 </div>
               </td>
 
               <td>
                 <div class="form-outline-Register">
-                  <p>Education</p>
-                  <input type="text" v-model="form.userEducation" id="form3Example4" placeholder="Education" />
+                  <p>Brith Date</p>
+                  <input class="input-date" type="date" v-model="form.userBirthDate" id="form3Example3" />
                 </div>
               </td>
             </tr>
@@ -100,10 +99,10 @@ export default {
         email: "",
         username: "",
         password: "",
-        userBirthDate:"",
-        userJob:"",
-        userCity:"",
-        userEducation:"",
+        userBirthDate: "",
+        userJob: "",
+        userCity: "",
+        userEducation: "",
       },
     };
   },
@@ -130,9 +129,9 @@ export default {
           }
         )
     },
-    
+
   },
-  
+
 };
 </script>
 
@@ -162,15 +161,15 @@ h1 {
 p {
   color: white;
   text-align: center;
-  
+
 }
 
 a {
   color: white;
-  
+
 }
 
-.login-link-text{
+.login-link-text {
   margin-left: 100px;
 }
 
@@ -219,6 +218,11 @@ a:hover {
   margin: auto;
   line-height: 1px;
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+}
+
+.input-date {
+  width: 190px;
+  height: 50px;
 }
 </style>
   

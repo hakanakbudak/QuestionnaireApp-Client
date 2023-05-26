@@ -1,17 +1,11 @@
 <template>
-  <div class="open-page">
-    <div class="row">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4">
-        <h6>{{ result }}</h6><br>
-      </div>
-      <div class="col-sm-4"></div>
-    </div>
-    
+  <div>
 
+    <h6>{{ result }}</h6><br>
     <div>
       <PersonList />
     </div>
+
   </div>
 </template>
 
@@ -20,8 +14,12 @@
 import PersonList from '../components/PersonList.vue'
 import axios from "axios";
 
+
 export default {
-  name: "OpenPage",
+  components: {
+    PersonList,
+  },
+
   data() {
     return {
       result: "",
@@ -35,7 +33,7 @@ export default {
       axios
         .get("http://localhost:3000/getData", {
           headers: {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "http://localhost:3000/getData",
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: localStorage.access_token,
@@ -56,8 +54,6 @@ export default {
         });
     },
   },
-  components: {
-    PersonList,
-  }
+
 };
 </script>
