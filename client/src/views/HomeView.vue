@@ -1,6 +1,10 @@
 <template>
-  <!--   -->
+
+  
   <div>
+    <div>
+      <NavBar/>
+    </div>
     <div class="row">
       <div class="col-sm-3"></div>
 
@@ -41,12 +45,13 @@
 
 import router from "../router";
 import axios from "axios";
+import NavBar from "../components/NavBar.vue"
 
 export default {
   name: "LoginPage",
 
   components: {
-
+    NavBar,
   },
 
   data() {

@@ -5,7 +5,7 @@
     <div>
       <PersonList />
     </div>
-
+    
   </div>
 </template>
 

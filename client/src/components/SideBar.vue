@@ -35,9 +35,8 @@
                         </tr>
                         <tr>
                             <td>
-                                <a href="http://localhost:8080/">Home</a>
+                                <a href="http://localhost:8080/openpage">Home</a>
                                 <a href="http://localhost:8080/create">Create</a>
-                                <a href="http://localhost:8080/openpage">List</a>
                                 <a href="http://localhost:8080/setting">Setting</a>
                             </td>
                         </tr>
@@ -59,11 +58,7 @@
                             </td>
                         </tr>
                         <br>
-                        <tr>
-                            <td>
-                                <ThemeButton />
-                            </td>
-                        </tr>
+                        
                     </table>
 
 
@@ -78,14 +73,10 @@
 
 import router from "../router";
 import axios from "axios";
-import ThemeButton from "@/components/ThemeButton.vue";
+
 
 
 export default {
-
-    components: {
-        ThemeButton
-    },
 
     methods: {
         openSidebar() {
@@ -114,23 +105,6 @@ export default {
 body {
     border-top-left-radius: 100px;
 }
-
-:root {
-    --background-color-primary: #ebebeb;
-    --background-color-secondary: #fafafa;
-    --accent-color: #cacaca;
-    --text-primary-color: #222;
-    --element-size: 4rem;
-}
-
-
-:root.dark-theme {
-    --background-color-primary: #1e1e1e;
-    --background-color-secondary: #2d2d30;
-    --accent-color: #3f3f3f;
-    --text-primary-color: #ddd;
-}
-
 
 .side-nav {
     height: 900px;
@@ -225,5 +199,8 @@ body {
     border-color: transparent;
     background-color: dodgerblue;
     border-radius: 8px;
+}
+.profileUsername{
+    color: aliceblue;
 }
 </style>

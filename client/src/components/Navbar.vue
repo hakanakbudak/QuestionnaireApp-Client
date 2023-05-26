@@ -2,10 +2,12 @@
   <div>
 
     <nav class="navbar">
-
+      
       <div>
 
-        <button class="nav-bar-button" type="button" @click="homePageButton()">Home</button>
+        <!--
+          <button class="nav-bar-button" type="button" @click="homePageButton()">Home</button>
+        -->
         <button class="nav-bar-button" type="button" @click="loginViewButton()">Login</button>
 
       </div>
@@ -57,7 +59,7 @@ nav {
   padding: 10px 25px;
   display: inline-block;
   position: relative;
-  left: 1300px;
+  left: 1400px;
 
 }
 
@@ -66,5 +68,9 @@ nav {
   border-color: transparent;
   background-color: dodgerblue;
   border-radius: 8px;
+}
+
+.title-text{
+  margin-left: 100px;
 }
 </style>

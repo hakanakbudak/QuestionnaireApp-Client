@@ -1,14 +1,11 @@
 <template>
     <div>
-
         <SideBar />
-
-
         <div class="row">
 
 
             <div class="col-sm-3">
-                <CommentForm />
+
             </div>
 
             <div class="col-sm-5">
@@ -28,7 +25,7 @@
 
                                 <li class="list-group-item">
                                     <h2 class="card-title">{{ person.category }}</h2>
-                                    <PopUp />
+                                    <button class="popup-open-button" @click="openComment()">Yorum Yap</button>
                                 </li>
 
                                 <li class="list-group-item">
@@ -75,19 +72,10 @@
                 </div>
 
             </div>
-
+            
             <div class="col-sm-3">
                 <div>
-                    
-                </div>
-
-                <div>
-                    <div v-for="comments in comment" :key="comments._id">
-                        <div>
-                            <p>{{ comments.comment }}</p>
-                        </div>
-                    </div>
-                    
+                    <CommentForm />
                 </div>
 
             </div>
@@ -100,32 +88,28 @@ import router from "../router";
 import axios from "axios";
 import CommentForm from "../components/CommentForm.vue"
 import SideBar from "../components/SideBar.vue"
-import PopUp from "../components/PopUp.vue"
+
 
 export default {
 
     components: {
         SideBar,
-        PopUp,
         CommentForm,
     },
 
     data() {
         return {
             persons: [],
-            comment: [],
             currentDate: "",
             currentTime: ""
         }
     },
-
 
     created() {
         this.getPersons(),
             this.getCurrentDateTime(),
             this.getComment()
     },
-
 
     methods: {
         async getPersons() {
@@ -165,15 +149,6 @@ export default {
             }
         },
 
-        async getComment() {
-            try {
-                const commentResponse = await axios.get('http://localhost:3000/comment')
-                this.comment = commentResponse.data
-            } catch (error) {
-                console.error(error)
-            }
-        },
-
         search() {
 
             const searchQuery = document.querySelector(".search-bar").value.toLowerCase(); // Arama sorgusu
@@ -196,7 +171,6 @@ export default {
             this.persons = filteredPersons;
 
         },
-
 
         logout() {
             localStorage.clear()
@@ -224,6 +198,12 @@ export default {
             this.currentDate = date.toDateString();
             this.currentTime = date.toLocaleTimeString();
         },
+
+        openComment(){
+            document.getElementById("comment-nav").style.visibility = "visible";
+        },
+
+        
     },
 };
 
@@ -282,6 +262,15 @@ export default {
 
 .date-text {
     font-size: 10px;
+}
+
+.popup-open-button{
+    background-color: rgb(16, 214, 16);
+    border-radius: 4px;
+    color: white;
+}
+.popup-open-button:hover{
+    background-color: rgba(0, 128, 0, 0.671);
 }
 </style>
 
