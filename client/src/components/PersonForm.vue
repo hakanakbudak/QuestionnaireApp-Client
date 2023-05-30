@@ -36,8 +36,8 @@
             <button type="button" @click="create()" class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Create</button>
 
-            <button type="button" @click="updatePerson()" class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Create</button>
+            <button type="button" @click="updateQuestionnaire()" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: green;">Update</button>
 
           </div>
 
@@ -64,15 +64,23 @@ export default {
       },
     };
   },
+
   methods: {
+
     create() {
       axios
-        .post("http://localhost:3000/create", this.person, {
-
+        .post("http://localhost:3000/questionnaire", this.person, {
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000/questionnaire",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          withCredentials: false,
         })
         .then(
           (response) => {
-            console.log(response);
+            console.log(response.data);
+            localStorage.access_token = response.data;
             router.replace({
               path: "/openpage",
             });
@@ -84,15 +92,27 @@ export default {
     },
 
 
-
-    updatePerson(_id) {
+    //put isteği
+    async updateQuestionnaire(_id) {
       try {
-        const { selectionOne, selectionTwo, selectionThree, question, category } = this.person
-        const response = axios.put(`http://localhost:3000/update/${_id, selectionOne, selectionTwo, selectionThree, question,category}`)
+        const { id } = this.$route.params;
+        const { selectionOne, selectionTwo, selectionThree, question, category } = this.person;
 
-        response.then((res) => {
-          this.person = res.data // response'dan gelen veriyi person veri modeline atayın
-        })
+
+        const response = await axios.put(`http://localhost:3000/questionnaire/${id}`, {
+          selectionOne,
+          selectionTwo,
+          selectionThree,
+          question,
+          category
+        });
+
+        const updatedPerson = response.data;
+
+        router.replace({
+          path: "/openpage",
+        });
+        console.log(updatedPerson);
       } catch (error) {
         console.log(error)
       }

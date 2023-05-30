@@ -6,17 +6,17 @@
         </div>
 
         <div class="col-sm-4">
-
+            
             <div class="card">
-                <div class="card-body">
 
+                <div class="card-body">
 
                     <form>
                         <table>
                             <tr>
                                 <td>
                                     <p>BirtDate</p>
-                                    <input type="text">
+                                    <input type="text"/>
                                 </td>
                             </tr>
                             <tr>
@@ -45,13 +45,8 @@
                             </tr>
                         </table>
                     </form>
-
-
                 </div>
-
             </div>
-
-
         </div>
 
         <div class="col-sm-4">
@@ -72,21 +67,22 @@ export default {
         SideBar,
     },
 
-    data() {
-        return {
-            //persons: []
-        }
+    created() {
+        this.editSetting()
     },
 
     methods: {
-        async getSetting() {
+
+        editSetting(_id, email, username, password, userBirthDate, userJob, userCity, userEducation) {
             try {
-                const response = await axios.get('http://localhost:3000/setting')
-                this.persons = response.data
+                const response = axios.get(`http://localhost:3000/setting/${_id}`, { email, username, password, userBirthDate, userJob, userCity, userEducation })
+                this.response = response.data,
+                    this.editSetting()
 
-
-            } catch (error) {
-                console.error(error)
+                console.log(response)
+            }
+            catch (error) {
+                console.log(error)
             }
         },
 
@@ -102,21 +98,21 @@ export default {
 }
 
 .setting-button {
-  width: 190px;
-  color: white;
-  outline: 0;
-  border: 2px solid currentcolor;
-  border-color: dodgerblue;
-  transition: 0.3s ease all;
-  background-color: dodgerblue;
-  padding: 20px 15px;
-  display: inline-block;
+    width: 190px;
+    color: white;
+    outline: 0;
+    border: 2px solid currentcolor;
+    border-color: dodgerblue;
+    transition: 0.3s ease all;
+    background-color: dodgerblue;
+    padding: 20px 15px;
+    display: inline-block;
 }
 
 .setting-button:hover {
-  color: black;
-  border-color: transparent;
-  background-color: white;
-  border-radius: 8px;
+    color: black;
+    border-color: transparent;
+    background-color: white;
+    border-radius: 8px;
 }
 </style>

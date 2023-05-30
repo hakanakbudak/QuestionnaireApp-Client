@@ -36,7 +36,7 @@
                         <tr>
                             <td>
                                 <a href="http://localhost:8080/openpage">Home</a>
-                                <a href="http://localhost:8080/create">Create</a>
+                                <a href="http://localhost:8080/questionnaire/create">Create</a>
                                 <a href="http://localhost:8080/setting">Setting</a>
                             </td>
                         </tr>
@@ -93,7 +93,7 @@ export default {
         logoutButton() {
             localStorage.clear()
             router.replace({
-                path: "/login",
+                path: "/home",
             });
         },
     }
@@ -130,7 +130,7 @@ body {
 }
 
 .side-nav a:hover {
-    color: darkblue;
+    color: rgb(236, 146, 21);
 }
 
 .side-nav .close-side-bar {

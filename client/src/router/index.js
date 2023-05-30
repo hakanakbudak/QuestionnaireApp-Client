@@ -7,8 +7,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "Home",
+    //component: HomeView,
   },
   {
     path: "/openpage",
@@ -38,16 +38,16 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/RegisterView.vue"),
   },
   {
-    path: "/create",
-    name: "Create",
+    path: "/questionnaire/:id",
+    name: "Questionnaire",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/CreateView.vue"),
+      import(/* webpackChunkName: "questionnaire" */ "../views/QuestionnaireView.vue"),
   },
   {
-    path: "/setting",
+    path: "/setting/:id",
     name: "Setting",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

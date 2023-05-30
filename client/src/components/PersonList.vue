@@ -3,7 +3,6 @@
         <SideBar />
         <div class="row">
 
-
             <div class="col-sm-3">
 
             </div>
@@ -57,22 +56,14 @@
 
                             <br>
 
-                            <button type="button" @click="editPerson(person._id)" class="btn btn-primary"> Edit
-                            </button>
+                            <button type="button" @click=" editPerson(person._id)" class="btn btn-primary"> Edit</button>
                             <button type="button" @click="removePerson(person._id)" class="btn btn-danger">Delete</button>
 
-
-
                         </div>
-
                     </div>
-
-
-
                 </div>
-
             </div>
-            
+
             <div class="col-sm-3">
                 <div>
                     <CommentForm />
@@ -82,13 +73,12 @@
         </div>
     </div>
 </template>
-<script>
 
+<script>
 import router from "../router";
 import axios from "axios";
 import CommentForm from "../components/CommentForm.vue"
 import SideBar from "../components/SideBar.vue"
-
 
 export default {
 
@@ -112,10 +102,13 @@ export default {
     },
 
     methods: {
+       
         async getPersons() {
             try {
-                const response = await axios.get('http://localhost:3000/persons')
+                const response = await axios.get('http://localhost:3000/questionnaire')
                 this.persons = response.data
+
+                
 
 
             } catch (error) {
@@ -126,7 +119,7 @@ export default {
 
         async removePerson(_id) {
             try {
-                await axios.delete(`http://localhost:3000/persons/${_id}`);
+                await axios.delete(`http://localhost:3000/questionnaire/${_id}`);
                 this.getPersons();
             } catch (error) {
                 console.log(error);
@@ -135,23 +128,25 @@ export default {
 
         editPerson(_id, selectionOne, selectionTwo, selectionThree, category) {
             try {
-                const response = axios.put(`http://localhost:3000/create/${_id}`, { selectionOne, selectionTwo, selectionThree, category })
+                const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category })
                 this.response = response.data,
 
                     console.log(response),
                     router.replace({
-                        path: `/create/${_id}`,
+                        path: `/questionnaire/${_id}`,
                     });
-
+                    
             }
             catch (error) {
                 console.log(error)
             }
         },
 
+        
+
         search() {
 
-            const searchQuery = document.querySelector(".search-bar").value.toLowerCase(); // Arama sorgusu
+            const searchQuery = document.querySelector(".search-bar").value.toLowerCase();
 
             // Listeyi filtrele ve kişileri getir
             const filteredPersons = this.persons.filter(person => {
@@ -199,11 +194,11 @@ export default {
             this.currentTime = date.toLocaleTimeString();
         },
 
-        openComment(){
+        openComment() {
             document.getElementById("comment-nav").style.visibility = "visible";
         },
 
-        
+
     },
 };
 
@@ -264,12 +259,13 @@ export default {
     font-size: 10px;
 }
 
-.popup-open-button{
+.popup-open-button {
     background-color: rgb(16, 214, 16);
     border-radius: 4px;
     color: white;
 }
-.popup-open-button:hover{
+
+.popup-open-button:hover {
     background-color: rgba(0, 128, 0, 0.671);
 }
 </style>
