@@ -14,11 +14,10 @@
                                 <button type="button" class="comment-button-close" @click="commentClose()">Close</button>
                             </div>
                             <br>
-                            
+
                             <div v-for="comments in comment" :key="comments._id">
                                 <div>
-                                    <p>{{ comments.comment }}</p>
-                                    
+                                      {{ comments.comment }}
                                 </div>
                             </div>
 
@@ -41,6 +40,7 @@
 </template>
 
 <script>
+
 import router from "../router";
 import axios from "axios";
 export default {
@@ -51,7 +51,7 @@ export default {
             commented: {
                 comment: "",
             },
-        };
+        }
     },
 
     created() {
@@ -89,7 +89,7 @@ export default {
             document.getElementById("comment-nav").style.visibility = "hidden";
             document.getElementById("comment-list-close").style.visibility = "hidden";
             document.getElementById("comment-button-close").style.visibility = "hidden";
-        }
+        },
     },
 };
 </script>
@@ -103,6 +103,7 @@ export default {
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+
     visibility: hidden;
 
 }
@@ -119,11 +120,12 @@ export default {
 
     overflow: scroll;
     scrollbar-width: thin;
+
     overflow-x: hidden;
 
 }
 
-.comment-list {}
+
 
 .comment-input-send {
     width: 260px;
@@ -168,4 +170,5 @@ export default {
 
 .close-button-position {
     position: fixed;
-}</style>
+}
+</style>

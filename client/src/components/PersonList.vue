@@ -8,14 +8,13 @@
             </div>
 
             <div class="col-sm-5">
-
-                <div class="search-area">
-                    <input class="search-bar" type="search" placeholder="Search...">
-                    <button type="search" @click="search()" class="search-button">S</button>
-                </div><br>
                 <br>
+                <div class="search-area">
+                    <input class="search-bar" v-model="searchQuery" type="search" placeholder="Search...">
+                    <button type="search" @click="searchQuestionnaire()" class="search-button">S</button>
+                </div>
 
-                <div v-for="person in persons" :key="person._id" class="card my-4">
+                <div v-for="questionnaire in questionnaires" :key="questionnaire._id" class="card my-4">
 
                     <div class="card">
                         <div class="card-body">
@@ -23,41 +22,60 @@
                             <ul class="list-group list-group-vertical">
 
                                 <li class="list-group-item">
-                                    <h2 class="card-title">{{ person.category }}</h2>
+                                    <h2 class="card-title">{{ questionnaire.category }}</h2>
                                     <button class="popup-open-button" @click="openComment()">Yorum Yap</button>
                                 </li>
 
                                 <li class="list-group-item">
-                                    <h5>{{ person.question }}</h5>
+                                    <h5>{{ questionnaire.question }}</h5>
                                     <p class="date-text">{{ currentDate }},{{ currentTime }}</p>
                                 </li>
 
-                                <li class="list-group-item">{{ person.selectionOne }} <br>
-                                    <button id="questionOneButton" class="question-average-button" @click="questionButton()"
-                                        @dblclick="questionCloseButton()" type="button">
-                                        <p id="numberTextOne" class="number-text"> %25 </p>
+                                <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
+
+                                    <button id="questionOneButton" :style="buttonStyle" class="question-average-button"
+                                        @click="questionButton()" type="button">
+                                        <p id="numberTextOne" v-if="isButtonShown" class="number-text"> %25 </p>
+                                    </button>
+
+                                </li>
+
+                                <li class="list-group-item">{{ questionnaire.selectionTwo }} <br>
+                                    <button id="questionTwoButton" :style="buttonStyle" class="question-average-button"
+                                        @click="questionButton()" type="button">
+                                        <p id="numberTextTwo" v-if="isButtonShown" class="number-text"> %25 </p>
                                     </button>
                                 </li>
 
-                                <li class="list-group-item">{{ person.selectionTwo }} <br>
-                                    <button id="questionTwoButton" class="question-average-button" @click="questionButton()"
-                                        @dblclick="questionCloseButton()" type="button">
-                                        <p id="numberTextTwo" class="number-text"> %25 </p>
+                                <li class="list-group-item">{{ questionnaire.selectionThree }} <br>
+                                    <button id="questionThreeButton" :style="buttonStyle" class="question-average-button"
+                                        @click="questionButton()" type="button">
+                                        <p id="numberTextThree" v-if="isButtonShown" class="number-text"> %50 </p>
                                     </button>
                                 </li>
 
-                                <li class="list-group-item">{{ person.selectionThree }} <br>
-                                    <button id="questionThreeButton" class="question-average-button"
-                                        @click="questionButton()" @dblclick="questionCloseButton()" type="button">
-                                        <p id="numberTextThree" class="number-text"> %50 </p>
-                                    </button>
-                                </li>
                             </ul>
 
                             <br>
 
-                            <button type="button" @click=" editPerson(person._id)" class="btn btn-primary"> Edit</button>
-                            <button type="button" @click="removePerson(person._id)" class="btn btn-danger">Delete</button>
+
+                            <div>
+                                <button type="button" @click="editQuestionnaire(questionnaire._id)" class="btn btn-primary">
+                                    Edit</button>
+
+                                <button type="button" @click="openPopup(questionnaire._id)"
+                                    class="btn btn-danger">Delete</button>
+
+                                <div v-if="isPopupOpen" class="popup-overlay">
+                                    <div class="popup-content">
+                                        <h4 class="popup-title">{{ selectedQuestionnaireId }}</h4>
+                                        <h6></h6>
+                                        <p class="popup-text">Anketi silmek istediğinize emin misiniz?</p>
+                                        <button class="popup-close-button" @click="closePopup()">No</button>
+                                        <button class="popup-yes-button" @click="removeQuestionnaire">Yes</button>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -89,26 +107,32 @@ export default {
 
     data() {
         return {
-            persons: [],
+            questionnaires: [],
             currentDate: "",
-            currentTime: ""
+            currentTime: "",
+            buttonStyle: {
+                height: 'height:34px'
+            },
+            isButtonShown: false,
+            searchQuery: '',
+            isPopupOpen: false,
+            selectedQuestionnaireId: null,
         }
     },
 
     created() {
         this.getPersons(),
             this.getCurrentDateTime(),
-            this.getComment()
+            this.getComment(),
+            this.getData()
     },
 
     methods: {
-       
+
         async getPersons() {
             try {
-                const response = await axios.get('http://localhost:3000/questionnaire')
-                this.persons = response.data
-
-                
+                const response = await axios.get('http://localhost:3000/questionnaire',)
+                this.questionnaires = response.data
 
 
             } catch (error) {
@@ -116,17 +140,41 @@ export default {
             }
         },
 
-
-        async removePerson(_id) {
+        /**
+        *  Seçmiş olduğumuz ankete _id'si üzerinden delete isteği yapıyorum ve anketi siliyorum.
+        *  @author Hakan Akbudak
+       **/
+        async removeQuestionnaire() {
             try {
-                await axios.delete(`http://localhost:3000/questionnaire/${_id}`);
+                await axios.delete(`http://localhost:3000/questionnaire/${this.selectedQuestionnaireId}`);
                 this.getPersons();
+                this.isPopupOpen = false;
+                this.selectedQuestionnaireId = null;
             } catch (error) {
                 console.log(error);
             }
         },
 
-        editPerson(_id, selectionOne, selectionTwo, selectionThree, category) {
+        /** 
+        * Delete butonu için popup open button
+        **/
+        openPopup(_id) {
+            this.selectedQuestionnaireId = _id;
+            this.isPopupOpen = true;
+        },
+
+        /** 
+        * Delete butonu için popup close button
+        **/
+        closePopup() {
+            this.isPopupOpen = false;
+        },
+
+        /**
+         *  Seçmiş olduğumuz ankete _id'si üzerinden get isteği yapıyorum ve anket bilgilerini çekiyorum.
+         *  @author Hakan Akbudak
+        **/
+        editQuestionnaire(_id, selectionOne, selectionTwo, selectionThree, category) {
             try {
                 const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category })
                 this.response = response.data,
@@ -135,38 +183,62 @@ export default {
                     router.replace({
                         path: `/questionnaire/${_id}`,
                     });
-                    
+
             }
             catch (error) {
                 console.log(error)
             }
         },
 
-        
+        /**
+         * Search işlemini server tarafında gerçekleştiriyorum.
+         *  @author Hakan Akbudak
+        **/
+        searchQuestionnaire() {
+            axios.get('http://localhost:3000/search', { params: { searchQuery: this.searchQuery } })
+                .then(response => {
+                    // Arama sonuçlarını işleyin
+                    this.questionnaires = response.data
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    // Hata durumunda işleme geçin
+                    console.error(error);
+                });
+        },
 
-        search() {
-
-            const searchQuery = document.querySelector(".search-bar").value.toLowerCase();
-
+        /**
+         * Search işlemini Vuejs üzerinden gerçekleştiriyorum.
+         *  @author Hakan Akbudak
+        **/
+        /*searchQuestionnaire() {
+ 
+            const processedQuery = this.searchQuery.toLowerCase();
+            //const searchQuery = document.querySelector(".search-bar").value.toLowerCase();
+ 
             // Listeyi filtrele ve kişileri getir
-            const filteredPersons = this.persons.filter(person => {
-                const category = person.question.toLowerCase();
-                const question = person.question.toLowerCase();
-                const selectionOne = person.selectionOne.toLowerCase();
-                const selectionTwo = person.selectionTwo.toLowerCase();
-                const selectionThree = person.selectionThree.toLowerCase();
-
+            const filteredQuestionnaires = this.questionnaires.filter(questionnaire => {
+                const category = questionnaire.question.toLowerCase();
+                const question = questionnaire.question.toLowerCase();
+                const selectionOne = questionnaire.selectionOne.toLowerCase();
+                const selectionTwo = questionnaire.selectionTwo.toLowerCase();
+                const selectionThree = questionnaire.selectionThree.toLowerCase();
+ 
                 return (
-                    question.includes(searchQuery) || selectionOne.includes(searchQuery) || selectionTwo.includes(searchQuery)
-                    || selectionThree.includes(searchQuery) || category.includes(searchQuery)
+                    question.includes(processedQuery) || selectionOne.includes(processedQuery) || selectionTwo.includes(processedQuery)
+                    || selectionThree.includes(processedQuery) || category.includes(processedQuery)
                 );
             });
 
             // Filtrenenleri güncelle
-            this.persons = filteredPersons;
+            this.questionnaires = filteredQuestionnaires;
+ 
+        },*/
 
-        },
-
+        /**
+         * (localStorage) alanını temizlemeyi gerçekleştiriyorum.
+         *  @author Hakan Akbudak
+        **/
         logout() {
             localStorage.clear()
             router.replace({
@@ -174,26 +246,29 @@ export default {
             });
         },
 
+        /**
+         *   v-if="isButtonShown" kullanarak style değişikliği yapıyorum.
+         *  @author Hakan Akbudak
+        **/
         questionButton() {
-            document.getElementById("questionOneButton").style.height = "5px";
-            document.getElementById("questionTwoButton").style.height = "5px";
-            document.getElementById("questionThreeButton").style.height = "5px";
-
-            document.getElementById("numberTextOne").style.visibility = "visible";
-            document.getElementById("numberTextTwo").style.visibility = "visible";
-            document.getElementById("numberTextThree").style.visibility = "visible";
+            this.buttonStyle.height = '5px';
+            this.isButtonShown = true;
         },
 
-        swipeTo() {
-            document.getElementById("swipe-button").style.height = "320px";
-        },
-
+        /**
+         *  Anketlerin paylaşım saatini tutuyorm.
+         *  @author Hakan Akbudak
+        **/
         getCurrentDateTime() {
             const date = new Date();
             this.currentDate = date.toDateString();
             this.currentTime = date.toLocaleTimeString();
         },
 
+        /**
+         *  Comment ekranını visible yapıyorum.
+         *  @author Hakan Akbudak
+        **/
         openComment() {
             document.getElementById("comment-nav").style.visibility = "visible";
         },
@@ -251,7 +326,7 @@ export default {
 }
 
 .number-text {
-    visibility: hidden;
+    visibility: visible;
     margin-top: 3px;
 }
 
@@ -267,6 +342,79 @@ export default {
 
 .popup-open-button:hover {
     background-color: rgba(0, 128, 0, 0.671);
+}
+
+
+
+
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    z-index: 4;
+}
+
+.popup-content p {
+    margin-bottom: 20px;
+    z-index: 4;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 4;
+}
+
+.popup-open-button {
+    background-color: rgb(16, 214, 16);
+    border-radius: 4px;
+    color: white;
+}
+
+.popup-open-button:hover {
+    background-color: rgba(0, 128, 0, 0.671);
+}
+
+.popup-close-button {
+    background-color: rgb(212, 22, 22);
+}
+
+.popup-close-button:hover {
+    border-width: 2px;
+    background-color: rgba(212, 22, 22, 0.762);
+}
+
+.popup-yes-button {
+    background-color: rgb(16, 214, 16);
+}
+
+.popup-yes-button:hover {
+    background-color: rgba(16, 214, 16, 0.763);
 }
 </style>
 

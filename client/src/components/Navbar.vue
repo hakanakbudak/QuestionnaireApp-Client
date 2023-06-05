@@ -1,18 +1,11 @@
 <template>
   <div>
-
     <nav class="navbar">
       
       <div>
-
-        <!--
-          <button class="nav-bar-button" type="button" @click="homePageButton()">Home</button>
-        -->
         <button class="nav-bar-button" type="button" @click="loginViewButton()">Login</button>
-
       </div>
     </nav>
-
   </div>
 </template>
 
@@ -24,12 +17,6 @@ import axios from "axios";
 export default {
 
   methods: {
-
-    homePageButton() {
-      router.replace({
-        path: "/",
-      });
-    },
 
     loginViewButton() {
       router.replace({

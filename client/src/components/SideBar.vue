@@ -58,7 +58,7 @@
                             </td>
                         </tr>
                         <br>
-                        
+
                     </table>
 
 
@@ -96,6 +96,8 @@ export default {
                 path: "/home",
             });
         },
+
+
     }
 }
 
@@ -160,9 +162,9 @@ body {
     }
 }
 
-.open-side-bar{
-    font-size:30px;
-    cursor:pointer;
+.open-side-bar {
+    font-size: 30px;
+    cursor: pointer;
 }
 
 
@@ -200,7 +202,8 @@ body {
     background-color: dodgerblue;
     border-radius: 8px;
 }
-.profileUsername{
+
+.profileUsername {
     color: aliceblue;
 }
 </style>

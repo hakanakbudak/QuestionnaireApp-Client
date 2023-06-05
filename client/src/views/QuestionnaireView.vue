@@ -5,7 +5,7 @@
         </div>
 
         <div>
-            
+
             <PersonForm />
         </div>
 
@@ -14,10 +14,11 @@
   
 <script>
 import SideBar from "../components/SideBar.vue"
-import PersonForm from "../components/PersonForm.vue"
 import CreateForm from "../components/CreateForm.vue"
-import router from "../router";
-import axios from "axios";
+import PersonForm from "../components/PersonForm.vue"
+import axios from 'axios';
+
+
 
 export default {
     components: {
@@ -38,8 +39,12 @@ export default {
         };
     },
 
-    methods: {
+    created(){
+        this.getData()
+    },
 
+    methods: {
+        
         /*
         create() {
             axios
@@ -66,11 +71,13 @@ export default {
             },
 
             */
+           
 
         updatePerson(_id) {
             try {
                 const { selectionOne, selectionTwo, selectionThree, question } = this.person
                 const response = axios.put(`http://localhost:3000/questionnaire/${_id, selectionOne, selectionTwo, selectionThree, question}`)
+
 
                 response.then((res) => {
                     this.person = res.data // response'dan gelen veriyi person veri modeline atayın
@@ -82,6 +89,7 @@ export default {
 
 
     },
+
 
 };
 </script>

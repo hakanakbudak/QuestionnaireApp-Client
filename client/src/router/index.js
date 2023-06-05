@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    //component: HomeView,
+    component: HomeView,
   },
   {
     path: "/openpage",
@@ -29,7 +29,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/LoginView.vue"),
   },
   {
-    path: "/register",
+    path: "/register/:id",
     name: "Register",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -47,7 +47,7 @@ const routes = [
       import(/* webpackChunkName: "questionnaire" */ "../views/QuestionnaireView.vue"),
   },
   {
-    path: "/setting/:id",
+    path: "/setting",
     name: "Setting",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

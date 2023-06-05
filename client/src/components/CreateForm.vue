@@ -66,7 +66,7 @@ export default {
             axios
                 .post("http://localhost:3000//questionnaire/create", this.person, {
                     headers: {
-                        "Access-Control-Allow-Origin": "http://localhost:3000//questionnaire/create",
+                        "Access-Control-Allow-Origin": "*",
                         Accept: "application/json",
                         "Content-Type": "application/json",
                     },

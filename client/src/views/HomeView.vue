@@ -1,54 +1,62 @@
 <template>
-
-  
   <div>
-    <div>
-      <NavBar/>
-    </div>
+    <NavBar />
     <div class="row">
-      <div class="col-sm-3"></div>
 
-      <div class="col-sm-5"><br>
+      <div class="col-sm-3">
 
-        
+      </div>
+
+      <div class="col-sm-5">
         <br>
-
-        <div v-for="person in persons" :key="person._id" class="card my-4">
+        <div v-for="questionnaire in questionnaires" :key="questionnaire._id" class="card my-4">
 
           <div class="card">
             <div class="card-body">
 
               <ul class="list-group list-group-vertical">
-                <h5 class="card-title">{{ person.category }}</h5>
-                <li class="list-group-item">{{ person.selectionOne }}</li>
-                <li class="list-group-item">{{ person.selectionTwo }}</li>
-                <li class="list-group-item">{{ person.selectionThree }} </li>
-                <li class="list-group-item">{{ person.question }} </li>
+
+                <li class="list-group-item">
+                  <h2 class="card-title">{{ questionnaire.category }}</h2>
+                </li>
+
+                <li class="list-group-item">
+                  <h5>{{ questionnaire.question }}</h5>
+                  <p class="date-text">{{ currentDate }},{{ currentTime }}</p>
+                </li>
+
+                <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
+                </li>
+
+                <li class="list-group-item">{{ questionnaire.selectionTwo }} <br>
+                </li>
+
+                <li class="list-group-item">{{ questionnaire.selectionThree }} <br>
+                </li>
               </ul>
-
+              <br>
             </div>
-
+            
           </div>
 
         </div>
-
       </div>
-      <div class="col-sm-3"></div>
+
+      <div class="col-sm-3">
+      </div>
 
     </div>
+
   </div>
 </template>
 
 <script>
-
-//import HomePage from "@/components/HomePage.vue";
 
 import router from "../router";
 import axios from "axios";
 import NavBar from "../components/NavBar.vue"
 
 export default {
-  name: "LoginPage",
 
   components: {
     NavBar,
@@ -56,31 +64,35 @@ export default {
 
   data() {
     return {
-      persons: []
+      questionnaires: [],
+
     }
   },
 
-  created() {
+  created(){
     this.getPersons()
   },
 
-
   methods: {
+
     async getPersons() {
-      try {
-        const response = await axios.get('http://localhost:3000/persons')
-        this.persons = response.data
+            try {
+                const response = await axios.get('http://localhost:3000/questionnaire',)
+                this.questionnaires = response.data
 
 
-      } catch (error) {
-        console.error(error)
-      }
-    },
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
+
     goToRegister() {
       router.replace({
         path: "/register",
       });
     },
+
     goToLogin() {
       router.replace({
         path: "/login",
@@ -110,4 +122,5 @@ export default {
   z-index: 1;
   border-radius: 10px;
 }
+
 </style>

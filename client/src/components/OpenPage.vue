@@ -1,11 +1,15 @@
 <template>
   <div>
+    
+    <h6>{{ result }}</h6>
 
-    <h6>{{ result }}</h6><br>
     <div>
+
       <PersonList />
     </div>
+
     
+
   </div>
 </template>
 
@@ -29,6 +33,7 @@ export default {
     this.getData();
   },
   methods: {
+
     getData() {
       axios
         .get("http://localhost:3000/getData", {
