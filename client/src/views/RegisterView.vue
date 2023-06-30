@@ -70,7 +70,7 @@
               <td>
                 <div class="form-outline-Register">
                   <p>Select Profile Image</p>
-                  <input class="form-outline-ımage" type="file"  @change="handleFileUpload" />
+                  <input class="form-outline-ımage" type="file" @change="handleFileUpload" />
                 </div>
               </td>
             </tr>
@@ -101,6 +101,21 @@
       </div>
     </div>
 
+    <div class="col-sm-3">
+      <figure class="notification">
+        <div class="notification__body">
+          <img
+          src=""
+          title="Success"
+          alt="Success"
+          class="notification__icon"
+          />
+          Your account has been created? &#128640;
+        </div>
+        <div class="notification__progress"></div>
+      </figure>
+    </div>
+
   </div>
 </template>
   
@@ -119,7 +134,7 @@ export default {
         userEducation: "",
         file: null,
       },
-      
+
     };
   },
   methods: {
@@ -153,7 +168,7 @@ export default {
       const formData = new FormData();
       formData.append('file', this.file);
 
-      axios.post('http://localhost:3000/register',this.form)
+      axios.post('http://localhost:3000/register', this.form)
         .then((response) => {
           console.log(response.data);
         })
@@ -161,7 +176,7 @@ export default {
           console.error(error);
         });
     }
-  }   
+  }
 
 };
 </script>
@@ -281,12 +296,12 @@ a:hover {
   height: 50px;
 }
 
-.form-outline-ımage{
-    background-color: whitesmoke;
-    width: 185px;
-    height: 50px;
-    text-align: center;
-    
+.form-outline-ımage {
+  background-color: whitesmoke;
+  width: 185px;
+  height: 50px;
+  text-align: center;
+
 }
 </style>
   

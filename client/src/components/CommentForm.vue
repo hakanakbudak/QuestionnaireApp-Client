@@ -59,6 +59,11 @@ export default {
     },
 
     methods: {
+
+        /**
+         * post metodu ile veritabanında bulunan comment tablosuna kullanıcıdan aldığım verileri yazıyorum
+         * @author Hakan Akbudak
+         */
         commentSend() {
             try {
                 axios
@@ -76,6 +81,10 @@ export default {
             }
         },
 
+        /**
+         * comment tablosundaki yorumları get ediyorum
+         * @author Hakan Akbudak
+         */
         async getComment() {
             try {
                 const commentResponse = await axios.get('http://localhost:3000/comment')
@@ -85,6 +94,7 @@ export default {
             }
         },
 
+        // İF ELSE İLE YAPILACAK 
         commentClose() {
             document.getElementById("comment-nav").style.visibility = "hidden";
             document.getElementById("comment-list-close").style.visibility = "hidden";

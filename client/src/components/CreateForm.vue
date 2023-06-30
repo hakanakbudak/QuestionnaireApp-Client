@@ -8,17 +8,15 @@
                 <div class="col-md-3"></div>
 
                 <div class="col-md-6">
-
+                    
                     <h3>Drop Us a Question</h3>
-
                     <div class="form-group">
                         <input type="text" v-model="person.category" name="txtCategory" class="form-control"
                             placeholder="#hastag" value="person.category" />
                     </div>
-
                     <div class="form-group">
                         <textarea name="txtQuestion" v-model="person.question" class="form-control" placeholder="Question "
-                            style="width: 100%; height: 50px;" value="person.message"></textarea>
+                            value="person.message"></textarea>
                     </div>
                     <div class="form-group">
                         <input type="text" v-model="person.selectionOne" name="txtAge" class="form-control"
@@ -33,8 +31,7 @@
                             placeholder="selectionThree *" value="person.city" />
                     </div>
                     <div class="form-group">
-                        <button type="button" @click="create()" class="btn btn-primary btn-lg"
-                            style="padding-left: 2.5rem; padding-right: 2.5rem;">Create</button>
+                        <button type="button" @click="create()" class="btn btn-primary btn-lg">Create</button>
                     </div>
 
                 </div>
@@ -62,9 +59,14 @@ export default {
     },
 
     methods: {
+
+        /**
+         * kullanıcıdan aldığım verileri questionnasre tablosuna yazdırıyorum
+         * @author Hakan Akbudak
+         */
         create() {
             axios
-                .post("http://localhost:3000//questionnaire/create", this.person, {
+                .post("http://localhost:3000/questionnaire/create", this.person, {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         Accept: "application/json",
@@ -89,4 +91,9 @@ export default {
 };
 </script>
   
-<style></style>
+<style>
+.from-control textarea {
+    width: 100%;
+    height: 50px;
+}
+</style>

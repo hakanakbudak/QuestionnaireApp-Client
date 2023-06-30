@@ -10,15 +10,13 @@
         <div class="col-md-6">
 
           <h3>Drop Us a Question</h3>
-
           <div class="form-group">
-            <input type="text" v-model="questionnaire.category" name="txtCategory" class="form-control" placeholder="#hastag"
-              value="questionnaire.category" />
+            <input type="text" v-model="questionnaire.category" name="txtCategory" class="form-control"
+              placeholder="#hastag" value="questionnaire.category" />
           </div>
-
           <div class="form-group">
             <textarea name="txtQuestion" v-model="questionnaire.question" class="form-control" placeholder="Question "
-              style="width: 100%; height: 50px;" value="questionnaire.question"></textarea>
+              value="questionnaire.question"></textarea>
           </div>
           <div class="form-group">
             <input type="text" v-model="questionnaire.selectionOne" name="txtAge" class="form-control"
@@ -34,13 +32,10 @@
           </div>
           <div class="form-group">
             <button type="button" @click="create()" class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Create</button>
-
+              >Create</button>
             <button type="button" @click="updateQuestionnaire()" class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: green;">Update</button>
-
+              >Update</button>
           </div>
-
         </div>
 
       </div>
@@ -67,6 +62,9 @@ export default {
 
   methods: {
 
+    /**
+     * kullanıcıdan aldığım verileri questionnaire tablosuna yazdırma işlemi yapıyorum. 
+     */
     create() {
       axios
         .post("http://localhost:3000/questionnaire", this.questionnaire, {
@@ -92,7 +90,10 @@ export default {
     },
 
 
-    
+    /**
+     * questionnaire tablosu içerisinde bulunan anket veirlerini id üzerinden update işlemi gerçekleştiriyorum. 
+     * @author Hakan Akbudak
+     */
     async updateQuestionnaire(_id) {
       try {
         const { id } = this.$route.params;
@@ -123,4 +124,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.from-control textarea {
+  width: 100%;
+  height: 50px;
+}
+
+.button{
+  padding-left: 2.5rem; 
+  padding-right: 2.5rem; 
+  background-color: green;
+}
+</style>

@@ -75,18 +75,20 @@ export default {
 
   methods: {
 
+    /**
+     * questionnaire tablosundan verileri get metodu ile çağırıyorum.
+     * @author Hakan Akbudak
+     */
     async getPersons() {
             try {
                 const response = await axios.get('http://localhost:3000/questionnaire',)
                 this.questionnaires = response.data
-
-
             } catch (error) {
                 console.error(error)
             }
         },
 
-
+        /*
     goToRegister() {
       router.replace({
         path: "/register",
@@ -98,6 +100,7 @@ export default {
         path: "/login",
       });
     },
+    */
   },
 
 };

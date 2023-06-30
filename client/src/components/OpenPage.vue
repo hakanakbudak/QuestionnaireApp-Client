@@ -34,6 +34,7 @@ export default {
   },
   methods: {
 
+    
     getData() {
       axios
         .get("http://localhost:3000/getData", {

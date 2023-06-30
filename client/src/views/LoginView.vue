@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="row">
 
     <div class="col-sm-3"></div>
@@ -32,7 +32,19 @@
       </div>
     </div>
 
-    <div class="col-sm-3"></div>
+    <div class="col-sm-3">
+
+      <figure class="notification" v-if="isSnackBarShown">
+        <div class="notification__body">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Yes_Check_Circle.svg/2048px-Yes_Check_Circle.svg.png"
+            title="Success" alt="Success" class="notification__icon" />
+          Your Login Successful &#128640;
+        </div>
+        <div class="notification__progress"></div>
+      </figure>
+
+    </div>
 
   </div>
 </template>
@@ -48,6 +60,7 @@ export default {
         email: "",
         password: "",
       },
+      isSnackBarShown:false,
     };
   },
   methods: {
@@ -60,6 +73,7 @@ export default {
             "Content-Type": "application/json",
           },
           withCredentials: false,
+          
         })
         .then(
           (response) => {
@@ -69,6 +83,7 @@ export default {
                 path: "/openpage",
               });
             }
+           
           },
           (error) => {
             console.log(error);
@@ -77,6 +92,9 @@ export default {
     },
   },
 };
+
+
+
 </script>
   
 <style>
@@ -102,7 +120,7 @@ h1 {
   color: white;
 }
 
-.p-text{
+.p-text {
   color: white;
   text-align: center;
 }
@@ -155,5 +173,61 @@ a:hover {
   height: 450px;
   line-height: 1px;
   background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+}
+
+.notification {
+  position: absolute;
+  bottom: -120px;
+  right: 670px;
+  width: max-content;
+  border-radius: 6px;
+  background-color: blue;
+  box-shadow: 0 1px 10px black;
+  opacity: 0;
+  visibility: visible;
+  animation: fade-in 3s linear;
+}
+
+.notification__icon {
+  height: 26px;
+  width: 26px;
+  margin-right: 4px;
+}
+
+.notification__body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px 8px;
+}
+
+.notification__progress {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: calc(100% - 8px);
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(to right, #313e2c, #aaec8a);
+  animation: progress 2.5s 0.3s linear;
+}
+
+@keyframes fade-in {
+  5% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  95% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progress {
+  to {
+    transform: scaleY(1);
+  }
 }
 </style>

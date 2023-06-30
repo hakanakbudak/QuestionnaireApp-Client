@@ -3,14 +3,13 @@
 
         <div class="row">
             <div class="col-sm-3">
-                <div id="side-bar" class="side-nav">
+                <div id="sideBar" class="side-nav">
 
                     <table class="table-body">
                         <tr>
                             <td>
-                                <div style="position: fixed;" id="main" class="open-side-bar">
+                                <div id="main" class="open-side-bar">
                                     <span @click="openSidebar()">
-
                                         &#9776;
                                     </span>
 
@@ -78,18 +77,23 @@ import axios from "axios";
 
 export default {
 
+    // İF ELSE İLE YAPILACAK 
     methods: {
         openSidebar() {
-            document.getElementById("side-bar").style.width = "250px";
+            document.getElementById("sideBar").style.width = "250px";
             document.getElementById("main").style.marginLeft = "250px";
         },
 
         closeSidebar() {
-            document.getElementById("side-bar").style.width = "0";
+            document.getElementById("sideBar").style.width = "0";
             document.getElementById("main").style.marginLeft = "0";
         },
 
 
+        /**
+         * kullanıcının hesaptan çıkma işlemini gerçekleştirerek localstorage clear ediyorum.
+         * @author Hakan Akbudak
+         */
         logoutButton() {
             localStorage.clear()
             router.replace({
@@ -120,7 +124,6 @@ body {
     transition: 0.5s;
     padding-top: 60px;
 }
-
 
 .side-nav a {
     padding: 1px 1px 5px 6px;
@@ -165,6 +168,7 @@ body {
 .open-side-bar {
     font-size: 30px;
     cursor: pointer;
+    position: fixed;
 }
 
 

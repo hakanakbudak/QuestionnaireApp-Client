@@ -129,21 +129,56 @@ export default {
 
     methods: {
 
+        /**
+         * database içerisinde bulunan questionnaire tablosuna get isteği yapıyorum 
+         */
+        /*
         async getPersons() {
             try {
-                const response = await axios.get('http://localhost:3000/questionnaire',)
+                const response = await axios.get(`http://localhost:3000/questionnaire`)
                 this.questionnaires = response.data
+                
+                
+               } catch (error) {
+                   console.error(error)
+               }
+           },
+           */
 
 
+
+        /*
+                getUserIdFromSession() {
+                    // Kullanıcının kimliğini localStorage'den veya sessionStorage'dan elde et
+                    return localStorage.getItem('User'); // Örnek: localStorage'dan kullanıcı kimliğini alma
+                },
+        */
+
+
+
+        
+        async getPersons() {
+            //const id = '64694b21adee7fc52b285a47'; // Kullanıcı kimliği
+            //const userId = '64694b21adee7fc52b285a47'; // Kullanıcıya ait anketleri filtrelemek için kullanıcı kimliği
+            const userId = this.getUserIdFromSession();
+
+            try {
+                const response = await axios.get(`http://localhost:3000/questionnaire/${userId}`);
+                const questionnaire = response.data;
+                console.log(questionnaire);
+                // Sonuçları işle veya görüntüleme işlemlerini burada gerçekleştirin
             } catch (error) {
-                console.error(error)
+                console.log(error);
+                // Hata durumunda işlemleri burada gerçekleştirin
             }
         },
+        
 
         /**
         *  Seçmiş olduğumuz ankete _id'si üzerinden delete isteği yapıyorum ve anketi siliyorum.
         *  @author Hakan Akbudak
        **/
+
         async removeQuestionnaire() {
             try {
                 await axios.delete(`http://localhost:3000/questionnaire/${this.selectedQuestionnaireId}`);
@@ -272,7 +307,6 @@ export default {
         openComment() {
             document.getElementById("comment-nav").style.visibility = "visible";
         },
-
 
     },
 };

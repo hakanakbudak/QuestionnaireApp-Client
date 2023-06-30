@@ -18,6 +18,10 @@ export default {
 
   methods: {
 
+    /**
+     * kullanıcıyı /login adresinde yönlendiriyorum.
+     * @author Hakan Akbudak
+     */
     loginViewButton() {
       router.replace({
         path: "/login",
