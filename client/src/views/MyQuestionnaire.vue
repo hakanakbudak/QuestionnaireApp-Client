@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>{{ result }}</h1>
         <SideBar />
         <div class="row">
 
@@ -23,12 +24,11 @@
 
                                 <li class="list-group-item">
                                     <h2 class="card-title">{{ questionnaire.category }}</h2>
-                                    <button class="popup-open-button" @click="openComment()">Yorum Yap</button>
+                                    <button class="popup-open-button" @click="openComment(questionnaire._id)">Yorum Yap</button>
                                 </li>
 
                                 <li class="list-group-item">
                                     <h5>{{ questionnaire.question }}</h5>
-                                    <p class="date-text">{{ currentDate }},{{ currentTime }}</p>
                                 </li>
 
                                 <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
@@ -72,7 +72,7 @@
                                         <h6></h6>
                                         <p class="popup-text">Anketi silmek istediğinize emin misiniz?</p>
                                         <button class="popup-close-button" @click="closePopup()">No</button>
-                                        <button class="popup-yes-button" @click="removeQuestionnaire">Yes</button>
+                                        <button class="popup-yes-button" @click="removeQuestionnaire()">Yes</button>
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
 
             <div class="col-sm-3">
                 <div>
-                    <CommentForm />
+                    
                 </div>
 
             </div>
@@ -95,21 +95,21 @@
 <script>
 import router from "../router";
 import axios from "axios";
-import CommentForm from "../components/CommentForm.vue"
+
 import SideBar from "../components/SideBar.vue"
+import jwt_decode from "jwt-decode";
 
 export default {
 
     components: {
         SideBar,
-        CommentForm,
+        
     },
 
     data() {
         return {
             questionnaires: [],
-            currentDate: "",
-            currentTime: "",
+            result: "",
             buttonStyle: {
                 height: 'height:34px'
             },
@@ -117,72 +117,79 @@ export default {
             searchQuery: '',
             isPopupOpen: false,
             selectedQuestionnaireId: null,
+            isCommentShow: false,
+
+
         }
     },
 
     created() {
-        this.getPersons(),
-            this.getCurrentDateTime(),
-            this.getComment(),
+        this.getMyQuestionnaires(),
             this.getData()
+        //this.getComment(),
+        //this.getData()
     },
 
     methods: {
 
+        getData() {
+            axios
+                .get("http://localhost:3000/getData", {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: localStorage.access_token,
+                    },
+                    withCredentials: false,
+                })
+                .then(
+                    (res) => {
+                        this.result = res.data;
+                        console.log("data get succesfully");
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                )
+                .catch((e) => {
+                    console.log(e);
+                });
+        },
+
+
+
         /**
-         * database içerisinde bulunan questionnaire tablosuna get isteği yapıyorum 
-         */
-        /*
-        async getPersons() {
+        * Login olan kullanıcının anketlerini getiriyorum.
+        * @author Hakan Akbudak
+        **/
+        async getMyQuestionnaires() {
+            
             try {
-                const response = await axios.get(`http://localhost:3000/questionnaire`)
-                this.questionnaires = response.data
-                
-                
-               } catch (error) {
-                   console.error(error)
-               }
-           },
-           */
+                const token = localStorage.getItem("access_token"); // JWT token'ını alın
+                // Token'ı çözümler ve kullanıcı kimliğini alır
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken._id; // Kullanıcı kimliği
+                console.log(token)
 
 
-
-        /*
-                getUserIdFromSession() {
-                    // Kullanıcının kimliğini localStorage'den veya sessionStorage'dan elde et
-                    return localStorage.getItem('User'); // Örnek: localStorage'dan kullanıcı kimliğini alma
-                },
-        */
-
-
-
-        
-        async getPersons() {
-            //const id = '64694b21adee7fc52b285a47'; // Kullanıcı kimliği
-            //const userId = '64694b21adee7fc52b285a47'; // Kullanıcıya ait anketleri filtrelemek için kullanıcı kimliği
-            const userId = this.getUserIdFromSession();
-
-            try {
                 const response = await axios.get(`http://localhost:3000/questionnaire/${userId}`);
-                const questionnaire = response.data;
-                console.log(questionnaire);
-                // Sonuçları işle veya görüntüleme işlemlerini burada gerçekleştirin
+                this.questionnaires = response.data; // Alınan verileri questionnaires veri alanına atayın
+                console.log(this.questionnaires);
             } catch (error) {
                 console.log(error);
-                // Hata durumunda işlemleri burada gerçekleştirin
+                
             }
         },
-        
 
         /**
         *  Seçmiş olduğumuz ankete _id'si üzerinden delete isteği yapıyorum ve anketi siliyorum.
         *  @author Hakan Akbudak
        **/
-
         async removeQuestionnaire() {
             try {
                 await axios.delete(`http://localhost:3000/questionnaire/${this.selectedQuestionnaireId}`);
-                this.getPersons();
+                this.getMyQuestionnaires();
                 this.isPopupOpen = false;
                 this.selectedQuestionnaireId = null;
             } catch (error) {
@@ -209,14 +216,14 @@ export default {
          *  Seçmiş olduğumuz ankete _id'si üzerinden get isteği yapıyorum ve anket bilgilerini çekiyorum.
          *  @author Hakan Akbudak
         **/
-        editQuestionnaire(_id, selectionOne, selectionTwo, selectionThree, category) {
+        editQuestionnaire(_id, selectionOne, selectionTwo, selectionThree, category, questionnaireDate) {
             try {
-                const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category })
+                const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category, questionnaireDate })
                 this.response = response.data,
 
                     console.log(response),
                     router.replace({
-                        path: `/questionnaire/${_id}`,
+                        path: `/questionnaire/update/${_id}`,
                     });
 
             }
@@ -247,10 +254,10 @@ export default {
          *  @author Hakan Akbudak
         **/
         /*searchQuestionnaire() {
- 
+     
             const processedQuery = this.searchQuery.toLowerCase();
             //const searchQuery = document.querySelector(".search-bar").value.toLowerCase();
- 
+     
             // Listeyi filtrele ve kişileri getir
             const filteredQuestionnaires = this.questionnaires.filter(questionnaire => {
                 const category = questionnaire.question.toLowerCase();
@@ -258,16 +265,16 @@ export default {
                 const selectionOne = questionnaire.selectionOne.toLowerCase();
                 const selectionTwo = questionnaire.selectionTwo.toLowerCase();
                 const selectionThree = questionnaire.selectionThree.toLowerCase();
- 
+     
                 return (
                     question.includes(processedQuery) || selectionOne.includes(processedQuery) || selectionTwo.includes(processedQuery)
                     || selectionThree.includes(processedQuery) || category.includes(processedQuery)
                 );
             });
-
+    
             // Filtrenenleri güncelle
             this.questionnaires = filteredQuestionnaires;
- 
+     
         },*/
 
         /**
@@ -291,26 +298,16 @@ export default {
         },
 
         /**
-         *  Anketlerin paylaşım saatini tutuyorm.
-         *  @author Hakan Akbudak
-        **/
-        getCurrentDateTime() {
-            const date = new Date();
-            this.currentDate = date.toDateString();
-            this.currentTime = date.toLocaleTimeString();
-        },
-
-        /**
          *  Comment ekranını visible yapıyorum.
          *  @author Hakan Akbudak
         **/
         openComment() {
-            document.getElementById("comment-nav").style.visibility = "visible";
+            //document.getElementById("comment-nav").style.visibility = "visible";
+            //this.isCommentShow=true;
+            this.isCommentShow = !this.isCommentShow;
         },
-
-    },
+    }
 };
-
 </script>
 
 <style>
@@ -364,10 +361,6 @@ export default {
     margin-top: 3px;
 }
 
-.date-text {
-    font-size: 10px;
-}
-
 .popup-open-button {
     background-color: rgb(16, 214, 16);
     border-radius: 4px;
@@ -377,10 +370,6 @@ export default {
 .popup-open-button:hover {
     background-color: rgba(0, 128, 0, 0.671);
 }
-
-
-
-
 
 
 .popup-overlay {

@@ -22,7 +22,7 @@
 
                 <li class="list-group-item">
                   <h5>{{ questionnaire.question }}</h5>
-                  <p class="date-text">{{ currentDate }},{{ currentTime }}</p>
+                  
                 </li>
 
                 <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
@@ -65,7 +65,6 @@ export default {
   data() {
     return {
       questionnaires: [],
-
     }
   },
 
@@ -102,7 +101,6 @@ export default {
     },
     */
   },
-
 };
 </script>
 

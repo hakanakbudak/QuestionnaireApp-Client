@@ -10,15 +10,7 @@ const routes = [
     name: "Home",
     component: HomeView,
   },
-  {
-    path: "/openpage",
-    name: "OpenPage",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/OpenPage.vue"),
-  },
+  
   {
     path: "/login",
     name: "Login",
@@ -38,13 +30,40 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/RegisterView.vue"),
   },
   {
-    path: "/questionnaire/:id",
+    path: "/questionnaire",
     name: "Questionnaire",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "questionnaire" */ "../views/QuestionnaireView.vue"),
+  },
+  {
+    path: "/questionnaire/:userId",
+    name: "MyQuestionnaire",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "myquestionnaire" */ "../views/MyQuestionnaire.vue"),
+  },
+  {
+    path: "/questionnaire/create/:id",
+    name: "CreateForm",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "createform" */ "../components/CreateForm.vue"),
+  },
+  {
+    path: "/questionnaire/update/:id",
+    name: "QuestionnaireForm",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "personform" */ "../components/QuestionnaireForm.vue"),
   },
   {
     path: "/setting",

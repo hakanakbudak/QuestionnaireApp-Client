@@ -60,10 +60,12 @@ export default {
         email: "",
         password: "",
       },
-      isSnackBarShown:false,
+      isSnackBarShown: false,
     };
   },
   methods: {
+
+
     userLogin() {
       axios
         .post("http://localhost:3000/login", this.form, {
@@ -73,23 +75,24 @@ export default {
             "Content-Type": "application/json",
           },
           withCredentials: false,
-          
+
         })
         .then(
           (response) => {
             if (response.data) {
               localStorage.access_token = response.data;
               router.push({
-                path: "/openpage",
+                path: "/questionnaire",
               });
             }
-           
+
           },
           (error) => {
             console.log(error);
           }
         );
     },
+
   },
 };
 

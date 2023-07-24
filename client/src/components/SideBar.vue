@@ -1,10 +1,8 @@
 <template>
     <div>
-
         <div class="row">
             <div class="col-sm-3">
                 <div id="sideBar" class="side-nav">
-
                     <table class="table-body">
                         <tr>
                             <td>
@@ -12,7 +10,6 @@
                                     <span @click="openSidebar()">
                                         &#9776;
                                     </span>
-
                                 </div>
                             </td>
                         </tr>
@@ -25,23 +22,17 @@
                         </tr>
                         <tr>
                             <td>
-
                                 <img class="profile-image"
                                     src="https://www.gentas.com.tr/wp-content/uploads/2021/05/3190-siyah_renk_g483_1250x1000_t3cksofn.jpg">
                                 <p class="profileUsername">bluesauer</p>
-
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <a href="http://localhost:8080/openpage">Home</a>
-                                <a href="http://localhost:8080/questionnaire/create">Create</a>
-                                <a href="http://localhost:8080/setting">Setting</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <br>
+                                <button class="home-button" @click="goToHome()">Home Page</button><br>
+                                <button class="home-button" @click="goToQuestionnaireCreate()">Create Questionnaire</button><br>
+                                <button class="home-button" @click="goToMyQuestionnaire()">My Questionnaires</button><br>
+                                <button class="home-button" @click="goToSetting()">Setting</button>    <br>
                             </td>
                         </tr>
                         <tr>
@@ -49,7 +40,11 @@
                                 <br>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <button type="button" @click="logoutButton()" class="logout-button">Logout</button>
@@ -57,10 +52,7 @@
                             </td>
                         </tr>
                         <br>
-
                     </table>
-
-
                 </div>
             </div>
         </div>
@@ -69,11 +61,8 @@
 
 <script>
 
-
 import router from "../router";
 import axios from "axios";
-
-
 
 export default {
 
@@ -89,22 +78,50 @@ export default {
             document.getElementById("main").style.marginLeft = "0";
         },
 
-
         /**
          * kullanıcının hesaptan çıkma işlemini gerçekleştirerek localstorage clear ediyorum.
          * @author Hakan Akbudak
-         */
+         **/
         logoutButton() {
             localStorage.clear()
             router.replace({
-                path: "/home",
+                name: "Home",
             });
         },
 
+        loginViewButton() {
+            router.replace({
+                path: "/questionnaire/:userId",
+            });
+        },
 
+        goToHome(){
+            router.replace({
+                path:"/questionnaire"
+            })
+
+        },
+
+        goToQuestionnaireCreate(){
+            router.replace({
+                path:"/questionnaire/create/:id"
+            })
+        },
+
+        goToMyQuestionnaire(){
+            router.replace({
+               path:"/questionnaire/:userId"
+            })
+        },
+
+        goToSetting(){
+            router.replace({
+                path:"/setting"
+            })
+        },
+    
     }
 }
-
 </script>
 
 <style>
@@ -209,5 +226,9 @@ body {
 
 .profileUsername {
     color: aliceblue;
+}
+
+.home-button {
+    background-color: transparent;
 }
 </style>

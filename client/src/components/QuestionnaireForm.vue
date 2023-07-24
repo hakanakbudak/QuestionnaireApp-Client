@@ -1,6 +1,10 @@
 <template>
   <div class="container contact-form">
 
+  <div>
+    <SideBar/>
+  </div>
+
     <form method="post">
 
       <div class="row">
@@ -31,8 +35,7 @@
               placeholder="selectionThree *" value="questionnaire.selectionThree" />
           </div>
           <div class="form-group">
-            <button type="button" @click="create()" class="btn btn-primary btn-lg"
-              >Create</button>
+            
             <button type="button" @click="updateQuestionnaire()" class="btn btn-primary btn-lg"
               >Update</button>
           </div>
@@ -46,16 +49,20 @@
 <script>
 import router from "../router";
 import axios from "axios";
+import SideBar from "../components/SideBar.vue"
 export default {
+  components:{
+    SideBar,
+  },
 
   data() {
     return {
       questionnaire: {
-        selectionOne: "",
-        selectionTwo: "",
-        selectionThree: "",
-        question: "",
-        category: "",
+        selectionOne: null,
+        selectionTwo: null,
+        selectionThree: null,
+        question: null,
+        category: null,
       },
     };
   },
@@ -65,6 +72,8 @@ export default {
     /**
      * kullanıcıdan aldığım verileri questionnaire tablosuna yazdırma işlemi yapıyorum. 
      */
+
+     /*
     create() {
       axios
         .post("http://localhost:3000/questionnaire", this.questionnaire, {
@@ -80,7 +89,7 @@ export default {
             console.log(response.data);
             localStorage.access_token = response.data;
             router.replace({
-              path: "/openpage",
+              path: `/questionnaire/${userId}/${_id}`,
             });
           },
           (error) => {
@@ -88,6 +97,7 @@ export default {
           }
         );
     },
+    */
 
 
     /**
@@ -111,7 +121,7 @@ export default {
         const updatedQuestionnaire = response.data;
 
         router.replace({
-          path: "/openpage",
+          path: "/questionnaire",
         });
         console.log(updatedQuestionnaire);
       } catch (error) {

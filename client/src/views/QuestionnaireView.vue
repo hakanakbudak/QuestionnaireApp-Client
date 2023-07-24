@@ -4,75 +4,51 @@
             <SideBar />
         </div>
 
+
         <div>
-
-            <PersonForm />
+            <QuestionnaireList/>
         </div>
-
     </div>
 </template>
   
 <script>
 import SideBar from "../components/SideBar.vue"
-import CreateForm from "../components/CreateForm.vue"
-import PersonForm from "../components/PersonForm.vue"
+import QuestionnaireList from "@/components/QuestionnaireList.vue";
 import axios from 'axios';
-
-
 
 export default {
     components: {
-        SideBar,
-        PersonForm,
-        CreateForm,
-    },
+        QuestionnaireList,
+    SideBar,
+},
 
     data() {
         return {
-            person: {
-                category: "",
-                selectionOne: "",
-                selectionTwo: "",
-                selectionThree: "",
-                question: "",
-            },
+            questionnaires: [],           
         };
     },
-
+    
     created(){
-        this.getData()
+        this.getPersons()
+        
     },
 
     methods: {
-        
-        /*
-        create() {
-            axios
-            .post("http://localhost:3000/questionnaire", this.person, {
-                headers: {
-                    "Access-Control-Allow-Origin": "http://localhost:3000/questionnaire",
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                withCredentials: false,
-            })
-            .then(
-                (response) => {
-                    console.log(response.data);
-                    localStorage.access_token = response.data;
-                    router.replace({
-                        path: "/openpage",
-                    });
-                },
-                (error) => {
-                    console.log(error);
-                }
-                );
-            },
-
-            */
+        /**
+         * database içerisinde bulunan questionnaire tablosuna getAll isteği yapıyorum 
+         */
+        async getPersons() {
+            try {
+                const response = await axios.get(`http://localhost:3000/questionnaire`)
+                this.questionnaires = response.data
+                
+                
+               } catch (error) {
+                   console.error(error)
+               }
+           },
            
-
+        
         updatePerson(_id) {
             try {
                 const { selectionOne, selectionTwo, selectionThree, question } = this.person
