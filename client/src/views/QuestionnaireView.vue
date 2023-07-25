@@ -3,8 +3,6 @@
         <div>
             <SideBar />
         </div>
-
-
         <div>
             <QuestionnaireList/>
         </div>
@@ -15,28 +13,21 @@
 import SideBar from "../components/SideBar.vue"
 import QuestionnaireList from "@/components/QuestionnaireList.vue";
 import axios from 'axios';
-
 export default {
     components: {
         QuestionnaireList,
     SideBar,
 },
-
     data() {
         return {
             questionnaires: [],           
         };
     },
-    
     created(){
         this.getPersons()
         
     },
-
     methods: {
-        /**
-         * database içerisinde bulunan questionnaire tablosuna getAll isteği yapıyorum 
-         */
         async getPersons() {
             try {
                 const response = await axios.get(`http://localhost:3000/questionnaire`)
@@ -47,8 +38,6 @@ export default {
                    console.error(error)
                }
            },
-           
-        
         updatePerson(_id) {
             try {
                 const { selectionOne, selectionTwo, selectionThree, question } = this.person
@@ -62,10 +51,6 @@ export default {
                 console.log(error)
             }
         },
-
-
     },
-
-
 };
 </script>

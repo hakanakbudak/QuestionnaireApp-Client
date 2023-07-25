@@ -1,46 +1,51 @@
 <template>
   <div class="container contact-form">
-
-  <div>
-    <SideBar/>
-  </div>
-
+    <div>
+      <SideBar />
+    </div>
     <form method="post">
-
       <div class="row">
-
         <div class="col-md-3"></div>
-
         <div class="col-md-6">
-
-          <h3>Drop Us a Question</h3>
-          <div class="form-group">
-            <input type="text" v-model="questionnaire.category" name="txtCategory" class="form-control"
-              placeholder="#hastag" value="questionnaire.category" />
-          </div>
-          <div class="form-group">
-            <textarea name="txtQuestion" v-model="questionnaire.question" class="form-control" placeholder="Question "
-              value="questionnaire.question"></textarea>
-          </div>
-          <div class="form-group">
-            <input type="text" v-model="questionnaire.selectionOne" name="txtAge" class="form-control"
-              placeholder="selectionOne *" value="questionnaire.selectionOne" />
-          </div>
-          <div class="form-group">
-            <input type="text" v-model="questionnaire.selectionTwo" name="txtCoutry" class="form-control"
-              placeholder="selectionTwo *" value="questionnaire.selectionTwo" />
-          </div>
-          <div class="form-group">
-            <input type="text" v-model="questionnaire.selectionThree" name="txtCity" class="form-control"
-              placeholder="selectionThree *" value="questionnaire.selectionThree" />
-          </div>
-          <div class="form-group">
-            
-            <button type="button" @click="updateQuestionnaire()" class="btn btn-primary btn-lg"
-              >Update</button>
-          </div>
+          <table>
+            <h3 class="form-title">Drop Us a Question</h3>
+            <tr>
+              <div class="form-group">
+                <input type="text" v-model="questionnaire.category" name="txtCategory" class="form-control"
+                  placeholder="#hastag" value="questionnaire.category" />
+              </div>
+            </tr>
+            <tr>
+              <div class="form-group">
+                <textarea name="txtQuestion" v-model="questionnaire.question" class="form-control" placeholder="Question "
+                  value="questionnaire.question"></textarea>
+              </div>
+            </tr>
+            <tr>
+              <div class="form-group">
+                <input type="text" v-model="questionnaire.selectionOne" name="txtAge" class="form-control"
+                  placeholder="selectionOne *" value="questionnaire.selectionOne" />
+              </div>
+            </tr>
+            <tr>
+              <div class="form-group">
+                <input type="text" v-model="questionnaire.selectionTwo" name="txtCoutry" class="form-control"
+                  placeholder="selectionTwo *" value="questionnaire.selectionTwo" />
+              </div>
+            </tr>
+            <tr>
+              <div class="form-group">
+                <input type="text" v-model="questionnaire.selectionThree" name="txtCity" class="form-control"
+                  placeholder="selectionThree *" value="questionnaire.selectionThree" />
+              </div>
+            </tr>
+            <tr>
+              <div class="form-group">
+                <button type="button" @click="updateQuestionnaire()" class="btn btn-primary btn-lg">Update</button>
+              </div>
+            </tr>
+          </table>
         </div>
-
       </div>
     </form>
   </div>
@@ -51,10 +56,9 @@ import router from "../router";
 import axios from "axios";
 import SideBar from "../components/SideBar.vue"
 export default {
-  components:{
+  components: {
     SideBar,
   },
-
   data() {
     return {
       questionnaire: {
@@ -66,50 +70,11 @@ export default {
       },
     };
   },
-
   methods: {
-
-    /**
-     * kullanıcıdan aldığım verileri questionnaire tablosuna yazdırma işlemi yapıyorum. 
-     */
-
-     /*
-    create() {
-      axios
-        .post("http://localhost:3000/questionnaire", this.questionnaire, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          withCredentials: false,
-        })
-        .then(
-          (response) => {
-            console.log(response.data);
-            localStorage.access_token = response.data;
-            router.replace({
-              path: `/questionnaire/${userId}/${_id}`,
-            });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    },
-    */
-
-
-    /**
-     * questionnaire tablosu içerisinde bulunan anket veirlerini id üzerinden update işlemi gerçekleştiriyorum. 
-     * @author Hakan Akbudak
-     */
     async updateQuestionnaire(_id) {
       try {
         const { id } = this.$route.params;
         const { selectionOne, selectionTwo, selectionThree, question, category } = this.questionnaire;
-
-
         const response = await axios.put(`http://localhost:3000/questionnaire/${id}`, {
           selectionOne,
           selectionTwo,
@@ -117,9 +82,7 @@ export default {
           question,
           category
         });
-
         const updatedQuestionnaire = response.data;
-
         router.replace({
           path: "/questionnaire",
         });
@@ -128,9 +91,7 @@ export default {
         console.log(error)
       }
     },
-
   },
-
 };
 </script>
 
@@ -139,10 +100,20 @@ export default {
   width: 100%;
   height: 50px;
 }
-
-.button{
-  padding-left: 2.5rem; 
-  padding-right: 2.5rem; 
+.form-control{
+  width: 500px;
+}
+.btn{
+  width: 500px;
+}
+.form-title {
+    font-size: 60px;
+    font-style: oblique;
+    
+}
+.button {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
   background-color: green;
 }
 </style>

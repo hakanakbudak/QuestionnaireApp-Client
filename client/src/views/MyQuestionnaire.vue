@@ -1,71 +1,57 @@
 <template>
     <div>
-        <h1>{{ result }}</h1>
+        <h1>{{ }}</h1>
         <SideBar />
         <div class="row">
-
             <div class="col-sm-3">
-
             </div>
-
             <div class="col-sm-5">
                 <br>
                 <div class="search-area">
                     <input class="search-bar" v-model="searchQuery" type="search" placeholder="Search...">
                     <button type="search" @click="searchQuestionnaire()" class="search-button">S</button>
                 </div>
-
                 <div v-for="questionnaire in questionnaires" :key="questionnaire._id" class="card my-4">
-
                     <div class="card">
                         <div class="card-body">
-
                             <ul class="list-group list-group-vertical">
-
                                 <li class="list-group-item">
                                     <h2 class="card-title">{{ questionnaire.category }}</h2>
-                                    <button class="popup-open-button" @click="openComment(questionnaire._id)">Yorum Yap</button>
+                                    <button class="popup-open-button" @click="openComment(questionnaire._id)">Yorum
+                                        Yap</button>
                                 </li>
-
                                 <li class="list-group-item">
                                     <h5>{{ questionnaire.question }}</h5>
                                 </li>
-
                                 <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
 
                                     <button id="questionOneButton" :style="buttonStyle" class="question-average-button"
-                                        @click="questionButton()" type="button">
-                                        <p id="numberTextOne" v-if="isButtonShown" class="number-text"> %25 </p>
+                                        @click="handleSelection(1, questionnaire._id)" type="button">
+                                        <p id="numberTextOne" v-if="isButtonShown" class="number-text">
+                                            %{{ selectionARatio }}</p>
                                     </button>
-
                                 </li>
-
                                 <li class="list-group-item">{{ questionnaire.selectionTwo }} <br>
                                     <button id="questionTwoButton" :style="buttonStyle" class="question-average-button"
-                                        @click="questionButton()" type="button">
-                                        <p id="numberTextTwo" v-if="isButtonShown" class="number-text"> %25 </p>
+                                        @click="handleSelection(2, questionnaire._id)" type="button">
+                                        <p id="numberTextTwo" v-if="isButtonShown" class="number-text">
+                                            %{{ selectionBRatio }} </p>
                                     </button>
                                 </li>
-
                                 <li class="list-group-item">{{ questionnaire.selectionThree }} <br>
                                     <button id="questionThreeButton" :style="buttonStyle" class="question-average-button"
-                                        @click="questionButton()" type="button">
-                                        <p id="numberTextThree" v-if="isButtonShown" class="number-text"> %50 </p>
+                                        @click="handleSelection(3, questionnaire._id)" type="button">
+                                        <p id="numberTextThree" v-if="isButtonShown" class="number-text">
+                                            %{{ selectionCRatio }} </p>
                                     </button>
                                 </li>
-
                             </ul>
-
                             <br>
-
-
                             <div>
                                 <button type="button" @click="editQuestionnaire(questionnaire._id)" class="btn btn-primary">
                                     Edit</button>
-
                                 <button type="button" @click="openPopup(questionnaire._id)"
                                     class="btn btn-danger">Delete</button>
-
                                 <div v-if="isPopupOpen" class="popup-overlay">
                                     <div class="popup-content">
                                         <h4 class="popup-title">{{ selectedQuestionnaireId }}</h4>
@@ -76,17 +62,40 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-sm-3">
                 <div>
-                    
-                </div>
+                    <div class="container contact-form">
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-md-5" v-show="isCommentShow">
+                                    <div id="comment-nav" class="comment-nav">
+                                        <div id="comment-list-close" class="comment-body">
+                                            <div class="close-button-position">
+                                            </div>
+                                            <br>
+                                            <div v-for="comment in comment" :key="comment._id">
+                                                <div>
+                                                    {{ comment.comment }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="comment-button-close">
 
+                                            <input type="text" v-model="commented.comment" class="comment-input-send"
+                                                placeholder="  comment..">
+                                            <button type="button" class="comment-button-send"
+                                                @click="commentSend(questionnaire._id)">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,17 +104,13 @@
 <script>
 import router from "../router";
 import axios from "axios";
-
 import SideBar from "../components/SideBar.vue"
 import jwt_decode from "jwt-decode";
-
 export default {
-
     components: {
         SideBar,
-        
-    },
 
+    },
     data() {
         return {
             questionnaires: [],
@@ -118,20 +123,25 @@ export default {
             isPopupOpen: false,
             selectedQuestionnaireId: null,
             isCommentShow: false,
-
-
+            comment: [],
+            commented: {
+                comment: "",
+            },
+            isCommentShow: false,
+            selectedQuestionnaireId: null,
+            questionnaire: null,
+            selectionARatio: 0,
+            selectionBRatio: 0,
+            selectionCRatio: 0,
         }
     },
-
     created() {
-        this.getMyQuestionnaires(),
-            this.getData()
-        //this.getComment(),
-        //this.getData()
+        this.getMyQuestionnaires();
+        this.getData();
+        this.getSurveyResults();
+        this.fetchImageFromDatabase();
     },
-
     methods: {
-
         getData() {
             axios
                 .get("http://localhost:3000/getData", {
@@ -156,36 +166,19 @@ export default {
                     console.log(e);
                 });
         },
-
-
-
-        /**
-        * Login olan kullanıcının anketlerini getiriyorum.
-        * @author Hakan Akbudak
-        **/
         async getMyQuestionnaires() {
-            
             try {
-                const token = localStorage.getItem("access_token"); // JWT token'ını alın
-                // Token'ı çözümler ve kullanıcı kimliğini alır
+                const token = localStorage.getItem("access_token");
                 const decodedToken = jwt_decode(token);
-                const userId = decodedToken._id; // Kullanıcı kimliği
+                const userId = decodedToken._id;
                 console.log(token)
-
-
                 const response = await axios.get(`http://localhost:3000/questionnaire/${userId}`);
-                this.questionnaires = response.data; // Alınan verileri questionnaires veri alanına atayın
+                this.questionnaires = response.data;
                 console.log(this.questionnaires);
             } catch (error) {
                 console.log(error);
-                
             }
         },
-
-        /**
-        *  Seçmiş olduğumuz ankete _id'si üzerinden delete isteği yapıyorum ve anketi siliyorum.
-        *  @author Hakan Akbudak
-       **/
         async removeQuestionnaire() {
             try {
                 await axios.delete(`http://localhost:3000/questionnaire/${this.selectedQuestionnaireId}`);
@@ -196,121 +189,103 @@ export default {
                 console.log(error);
             }
         },
-
-        /** 
-        * Delete butonu için popup open button
-        **/
         openPopup(_id) {
             this.selectedQuestionnaireId = _id;
             this.isPopupOpen = true;
         },
-
-        /** 
-        * Delete butonu için popup close button
-        **/
         closePopup() {
             this.isPopupOpen = false;
         },
-
-        /**
-         *  Seçmiş olduğumuz ankete _id'si üzerinden get isteği yapıyorum ve anket bilgilerini çekiyorum.
-         *  @author Hakan Akbudak
-        **/
         editQuestionnaire(_id, selectionOne, selectionTwo, selectionThree, category, questionnaireDate) {
             try {
                 const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category, questionnaireDate })
                 this.response = response.data,
-
                     console.log(response),
                     router.replace({
                         path: `/questionnaire/update/${_id}`,
                     });
-
             }
             catch (error) {
                 console.log(error)
             }
         },
-
-        /**
-         * Search işlemini server tarafında gerçekleştiriyorum.
-         *  @author Hakan Akbudak
-        **/
         searchQuestionnaire() {
             axios.get('http://localhost:3000/search', { params: { searchQuery: this.searchQuery } })
                 .then(response => {
-                    // Arama sonuçlarını işleyin
                     this.questionnaires = response.data
                     console.log(response.data);
                 })
                 .catch(error => {
-                    // Hata durumunda işleme geçin
                     console.error(error);
                 });
         },
-
-        /**
-         * Search işlemini Vuejs üzerinden gerçekleştiriyorum.
-         *  @author Hakan Akbudak
-        **/
-        /*searchQuestionnaire() {
-     
-            const processedQuery = this.searchQuery.toLowerCase();
-            //const searchQuery = document.querySelector(".search-bar").value.toLowerCase();
-     
-            // Listeyi filtrele ve kişileri getir
-            const filteredQuestionnaires = this.questionnaires.filter(questionnaire => {
-                const category = questionnaire.question.toLowerCase();
-                const question = questionnaire.question.toLowerCase();
-                const selectionOne = questionnaire.selectionOne.toLowerCase();
-                const selectionTwo = questionnaire.selectionTwo.toLowerCase();
-                const selectionThree = questionnaire.selectionThree.toLowerCase();
-     
-                return (
-                    question.includes(processedQuery) || selectionOne.includes(processedQuery) || selectionTwo.includes(processedQuery)
-                    || selectionThree.includes(processedQuery) || category.includes(processedQuery)
-                );
-            });
-    
-            // Filtrenenleri güncelle
-            this.questionnaires = filteredQuestionnaires;
-     
-        },*/
-
-        /**
-         * (localStorage) alanını temizlemeyi gerçekleştiriyorum.
-         *  @author Hakan Akbudak
-        **/
-        logout() {
-            localStorage.clear()
-            router.replace({
-                path: "/",
-            });
-        },
-
-        /**
-         *   v-if="isButtonShown" kullanarak style değişikliği yapıyorum.
-         *  @author Hakan Akbudak
-        **/
         questionButton() {
             this.buttonStyle.height = '5px';
             this.isButtonShown = true;
         },
-
-        /**
-         *  Comment ekranını visible yapıyorum.
-         *  @author Hakan Akbudak
-        **/
-        openComment() {
-            //document.getElementById("comment-nav").style.visibility = "visible";
-            //this.isCommentShow=true;
+        commentSend(questionnaireId) {
+            this.selectedQuestionnaireId = questionnaireId;
+            try {
+                axios.post(`http://localhost:3000/questionnaire/comment/${questionnaireId}`, { comment: this.commented })
+                    .then((response) => {
+                        console.log(response);
+                        this.openComment(questionnaireId)
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                return
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async openComment(questionnaireId) {
             this.isCommentShow = !this.isCommentShow;
+            this.selectedQuestionnaireId = questionnaireId;
+
+            try {
+                const commentResponse = await axios.get(`http://localhost:3000/questionnaire/${questionnaireId}/comment`);
+                this.comment = commentResponse.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        commentClose() {
+            this.isCommentShow = false;
+
+        },
+        async handleSelection(selectionId, questionnaireId) {
+            try {
+                this.selectedQuestionnaireId = questionnaireId;
+                const token = localStorage.getItem("access_token");
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken._id;
+                console.log(token)
+                await axios.post("http://localhost:3000/submitVote", { selectionId, questionnaireId, userId });
+                this.getSurveyResults();
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async getSurveyResults() {
+            try {
+                const response = await axios.get("http://localhost:3000/getSurveyResults");
+                this.selectionARatio = response.data.selectionARatio;
+                this.selectionBRatio = response.data.selectionBRatio;
+                this.selectionCRatio = response.data.selectionCRatio;
+            } catch (error) {
+                console.error(error);
+            }
         },
     }
 };
 </script>
 
 <style>
+body {
+    background-color: rgb(196, 220, 224);
+}
+
 .search-bar {
     width: 540px;
     height: auto;
@@ -438,6 +413,87 @@ export default {
 
 .popup-yes-button:hover {
     background-color: rgba(16, 214, 16, 0.763);
+}
+
+
+
+
+
+
+
+.comment-nav {
+    height: 10px;
+    width: 10px;
+    position: fixed;
+    z-index: 1;
+    overflow-x: visible;
+    transition: 0.5s;
+    padding-top: 60px;
+
+    visibility: visible;
+
+}
+
+.comment-body {
+    width: 350px;
+    height: 350px;
+    background-color: white;
+    border: 2px solid;
+    border-color: black;
+    position: fixed;
+    bottom: 40px;
+    border-radius: 5px;
+
+    overflow: scroll;
+    scrollbar-width: thin;
+
+    overflow-x: visible;
+
+}
+
+.comment-input-send {
+    width: 260px;
+    height: 30px;
+    position: fixed;
+    bottom: 3px;
+    margin-left: 3px;
+    border-radius: 15px;
+}
+
+.comment-button-send {
+    width: 60px;
+    height: 30px;
+    background-color: rgba(16, 214, 16, 0.649);
+    position: fixed;
+    bottom: 3px;
+    right: 143px;
+    border-radius: 15px;
+}
+
+.comment-button-send:hover {
+    background-color: rgb(16, 214, 16);
+    color: white;
+}
+
+.comment-button-close {
+    width: 330px;
+    height: 30px;
+    top: 0px;
+    background-color: rgb(226, 5, 5);
+    border-radius: 4px;
+    border-color: white;
+}
+
+.comment-button-close:hover {
+    background-color: red;
+    color: white;
+    width: 333px;
+    height: 33px;
+
+}
+
+.close-button-position {
+    position: fixed;
 }
 </style>
 

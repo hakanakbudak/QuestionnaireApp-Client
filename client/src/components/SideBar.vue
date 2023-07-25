@@ -2,12 +2,12 @@
     <div>
         <div class="row">
             <div class="col-sm-3">
-                <div id="sideBar" class="side-nav">
+                <div id="sideBar" :style="sideBarStyle" class="side-nav">
                     <table class="table-body">
                         <tr>
                             <td>
-                                <div id="main" class="open-side-bar">
-                                    <span @click="openSidebar()">
+                                <div id="main"  class="open-side-bar">
+                                    <span  @click="openSidebar()">
                                         &#9776;
                                     </span>
                                 </div>
@@ -66,60 +66,62 @@ import axios from "axios";
 
 export default {
 
-    // İF ELSE İLE YAPILACAK 
+    data(){
+        return{
+            sideBarStyle: {
+                width:'width:250px',
+                marginLeft:'marginLeft:250px'
+            },
+            
+        }
+    },
+
+    
     methods: {
         openSidebar() {
-            document.getElementById("sideBar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
+            //document.getElementById("sideBar").style.width = "250px";
+            //document.getElementById("main").style.marginLeft = "250px";
+            this.sideBarStyle.width = '250px';
+            this.sideBarStyle.marginLeft = '250px';
         },
-
         closeSidebar() {
-            document.getElementById("sideBar").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
+            //document.getElementById("sideBar").style.width = "0";
+            //document.getElementById("main").style.marginLeft = "0";
+            this.sideBarStyle.width = '0px';
+            this.sideBarStyle.marginLeft = '0px';
         },
-
-        /**
-         * kullanıcının hesaptan çıkma işlemini gerçekleştirerek localstorage clear ediyorum.
-         * @author Hakan Akbudak
-         **/
         logoutButton() {
             localStorage.clear()
             router.replace({
                 name: "Home",
             });
         },
-
         loginViewButton() {
             router.replace({
                 path: "/questionnaire/:userId",
             });
         },
-
         goToHome(){
             router.replace({
                 path:"/questionnaire"
             })
 
         },
-
         goToQuestionnaireCreate(){
             router.replace({
                 path:"/questionnaire/create/:id"
             })
         },
-
         goToMyQuestionnaire(){
             router.replace({
                path:"/questionnaire/:userId"
             })
         },
-
         goToSetting(){
             router.replace({
                 path:"/setting"
             })
         },
-    
     }
 }
 </script>
@@ -128,20 +130,19 @@ export default {
 body {
     border-top-left-radius: 100px;
 }
-
 .side-nav {
     height: 900px;
     width: 0;
-    position: fixed;
+    position:fixed;
     z-index: 1;
     top: 0;
-    left: 0;
+    left:0;
     background-color: rgb(0, 9, 121, 1);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    
 }
-
 .side-nav a {
     padding: 1px 1px 5px 6px;
     text-decoration: none;
@@ -150,11 +151,9 @@ body {
     display: block;
 
 }
-
 .side-nav a:hover {
     color: rgb(236, 146, 21);
 }
-
 .side-nav .close-side-bar {
     position: absolute;
     top: 0;
@@ -162,7 +161,6 @@ body {
     font-size: 36px;
     margin-left: 50px;
 }
-
 #main {
     transition: margin-left .5s;
     padding: 16px;
@@ -171,7 +169,6 @@ body {
     height: 70px;
 
 }
-
 @media screen and (max-height: 450px) {
     .side-nav {
         padding-top: 15px;
@@ -181,19 +178,15 @@ body {
         font-size: 18px;
     }
 }
-
 .open-side-bar {
     font-size: 30px;
     cursor: pointer;
     position: fixed;
 }
-
-
 .table-body {
     margin-left: auto;
     margin-right: auto;
 }
-
 .profile-image {
     width: 100px;
     height: 100px;
@@ -201,7 +194,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-
 .logout-button {
     width: 150px;
     height: 50px;
@@ -216,18 +208,15 @@ body {
     padding: 6px 15px;
     display: inline-block;
 }
-
 .logout-button:hover {
     color: white;
     border-color: transparent;
     background-color: dodgerblue;
     border-radius: 8px;
 }
-
 .profileUsername {
     color: aliceblue;
 }
-
 .home-button {
     background-color: transparent;
 }

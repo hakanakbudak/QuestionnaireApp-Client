@@ -1,58 +1,39 @@
 <template >
   <div class="row">
-
     <div class="col-sm-3"></div>
-
     <div class="col-sm-6">
-
       <div class="login-view-body">
-        <h1>Login</h1>
         <form>
+          <h1>Login</h1>
+          <tr>
+            <div class="form-outline-Login">
+              <p class="p-text">Email Addres</p>
+              <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
+              <p class="p-text">Password</p>
+              <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
 
-          <div class="form-outline-Login">
-            <p class="p-text">Email Addres</p>
-            <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
-          </div>
-
-          <div class="form-outline-Login">
-            <p class="p-text">Password</p>
-            <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
-          </div>
-
-          <div class="text-center text-lg-start mt-4 pt-2">
+            </div>
+          </tr>
+          <tr>
             <button type="button" @click="userLogin()" class="login-button"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="http://localhost:8080/register/:id"
-                class="link-danger">Register</a>
-            </p>
-          </div>
-
+            <div>
+              <p class="register-link">Don't have an account?
+                <button @click="goToRegisterPage()" class="link-danger">Register</button>
+              </p>
+            </div>
+          </tr>
         </form>
-
       </div>
     </div>
-
     <div class="col-sm-3">
-
-      <figure class="notification" v-if="isSnackBarShown">
-        <div class="notification__body">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Yes_Check_Circle.svg/2048px-Yes_Check_Circle.svg.png"
-            title="Success" alt="Success" class="notification__icon" />
-          Your Login Successful &#128640;
-        </div>
-        <div class="notification__progress"></div>
-      </figure>
-
     </div>
-
   </div>
 </template>
   
 <script>
 import router from "../router";
 import axios from "axios";
-
 export default {
   data() {
     return {
@@ -64,8 +45,6 @@ export default {
     };
   },
   methods: {
-
-
     userLogin() {
       axios
         .post("http://localhost:3000/login", this.form, {
@@ -75,7 +54,6 @@ export default {
             "Content-Type": "application/json",
           },
           withCredentials: false,
-
         })
         .then(
           (response) => {
@@ -85,35 +63,27 @@ export default {
                 path: "/questionnaire",
               });
             }
-
           },
           (error) => {
             console.log(error);
           }
         );
     },
-
+    goToRegisterPage(){
+      router.push({
+        path:"/register"
+      })
+    }
   },
 };
-
-
-
 </script>
-  
-<style>
-body {
-  background-color: aliceblue;
-}
 
+<style>
 input {
-  border-radius: 10px;
+  height: 40px;
+  width: 220px;
+  border-radius: 4px;
   border-color: white;
-  text-decoration: none;
-  padding: 8px 4px;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1px;
-  margin-left: 100px;
 }
 
 h1 {
@@ -123,114 +93,55 @@ h1 {
   color: white;
 }
 
-.p-text {
-  color: white;
-  text-align: center;
+.link-danger{
+  background-color: transparent;
+  border-color: transparent;
 }
 
-a {
-  color: white;
-}
-
-a:hover {
-  color: white;
+.login-view-body {
+  background-color: dodgerblue;
+  border-radius: 5px;
+  margin: auto;
+  width: 400px;
+  height: 450px;
 }
 
 .login-button {
+  margin-top: 20px;
+  height: 50px;
+  width: 220px;
   color: white;
   outline: 0;
+  border-radius: 6px;
   border: 2px solid currentcolor;
   border-color: dodgerblue;
   transition: 0.3s ease all;
-  background-color: dodgerblue;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 20px 15px;
-  display: inline-block;
+  background-color: darkblue;
+  margin-left: 100px;
 }
 
 .login-button:hover {
   color: black;
-  border-color: transparent;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
 }
 
 .form-outline-Login {
-  margin-top: 60px;
-  line-height: 1px;
-  font-size: 15px;
-  font-weight: 600;
-  color: aliceblue;
+  text-align: center;
+  margin-left: 90px;
 }
 
-.login-view-body {
-  background-color: rgb(241, 138, 12);
-  border-radius: 30px;
-  border-color: black;
-  margin-top: 150px;
-  margin-bottom: 20px;
-  position: relative;
-  margin: auto;
-  width: 400px;
-  height: 450px;
-  line-height: 1px;
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+.register-link {
+  text-align: center;
+  margin-left: 90px;
+  color: white;
 }
 
-.notification {
-  position: absolute;
-  bottom: -120px;
-  right: 670px;
-  width: max-content;
-  border-radius: 6px;
-  background-color: blue;
-  box-shadow: 0 1px 10px black;
-  opacity: 0;
-  visibility: visible;
-  animation: fade-in 3s linear;
+.p-text {
+  color: white;
 }
 
-.notification__icon {
-  height: 26px;
-  width: 26px;
-  margin-right: 4px;
-}
-
-.notification__body {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 16px 8px;
-}
-
-.notification__progress {
-  position: absolute;
-  left: 4px;
-  bottom: 4px;
-  width: calc(100% - 8px);
-  transform: scaleX(0);
-  transform-origin: left;
-  background: linear-gradient(to right, #313e2c, #aaec8a);
-  animation: progress 2.5s 0.3s linear;
-}
-
-@keyframes fade-in {
-  5% {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  95% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes progress {
-  to {
-    transform: scaleY(1);
-  }
+.link-danger {
+  color: white;
 }
 </style>

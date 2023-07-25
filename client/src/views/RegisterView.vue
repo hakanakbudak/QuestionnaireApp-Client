@@ -8,9 +8,7 @@
       <div class="register-view-body">
         <h1>Register</h1>
         <form>
-
           <table>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -18,7 +16,6 @@
                   <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Education</p>
@@ -26,7 +23,6 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -34,7 +30,6 @@
                   <input type="text" v-model="form.username" id="form3Example3" placeholder="Enter a valid username" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Job</p>
@@ -42,7 +37,6 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -50,7 +44,6 @@
                   <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>City</p>
@@ -58,68 +51,48 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
                   <p>Brith Date</p>
-                  <input class="input-date" type="date" v-model="form.userBirthDate" id="form3Example3" />
+                  <input type="date" v-model="form.userBirthDate" id="form3Example3" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Select Profile Image</p>
-                  <input class="form-outline-ımage" type="file" @change="handleFileUpload" />
+                  <input class="select-profile-photo" type="file" @change="handleFileUpload()" />
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="text-center text-lg-start mt-4 pt-2">
                   <button type="button" @click="register()" class="register-button">Register</button>
                   <div class="login-link-text">
                     <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
-                      <a href="http://localhost:8080/login" class="link-danger">Login</a>
+                      <button @click="goToLoginpage()" class="link-danger">Login</button>
                     </p>
                   </div>
                 </div>
               </td>
-
               <td>
                 <div class="text-center text-lg-start mt-3">
-                  <button @click="uploadImage" class="ımage-upload-button">Resim Yükle</button>
+                  <button @click="uploadImage()" class="ımage-upload-button">Resim Yükle</button>
                 </div>
               </td>
             </tr>
-
           </table>
-
         </form>
-
       </div>
     </div>
-
     <div class="col-sm-3">
-      <figure class="notification">
-        <div class="notification__body">
-          <img
-          src=""
-          title="Success"
-          alt="Success"
-          class="notification__icon"
-          />
-          Your account has been created? &#128640;
-        </div>
-        <div class="notification__progress"></div>
-      </figure>
     </div>
-
   </div>
 </template>
   
 <script>
+import router from "../router";
 import axios from "axios";
 export default {
   data() {
@@ -134,7 +107,6 @@ export default {
         userEducation: "",
         file: null,
       },
-
     };
   },
   methods: {
@@ -160,14 +132,17 @@ export default {
           }
         )
     },
-
+    goToLoginpage() {
+      router.replace({
+        path: "/login",
+      });
+    },
     handleFileUpload(event) {
       this.file = event.target.files[0];
     },
     uploadFile() {
       const formData = new FormData();
       formData.append('file', this.file);
-
       axios.post('http://localhost:3000/register', this.form)
         .then((response) => {
           console.log(response.data);
@@ -177,37 +152,42 @@ export default {
         });
     }
   }
-
 };
 </script>
 
 <style>
-body {
-  background-color: aliceblue;
+.register-view-body {
+  width: 700px;
+  height: 580px;
+  background-color: rgb(241, 138, 12);
+  border-radius: 30px;
+  border-color: black;
+  margin-top: 150px;
+  margin-bottom: 20px;
+  position: relative;
+  margin: auto;
+  line-height: 1px;
+  background-color: dodgerblue;
 }
 
 input {
-  border-radius: 10px;
+  height: 40px;
+  width: 220px;
+  border-radius: 4px;
   border-color: white;
-  text-decoration: none;
-  padding: 8px 4px;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1px;
   margin-left: 100px;
 }
 
 h1 {
   margin-top: 60px;
-  margin-left: 130px;
-  line-height: 100px;
+  text-align: center;
+  ;
   color: white;
 }
 
 p {
   color: white;
   text-align: center;
-
 }
 
 a {
@@ -223,85 +203,63 @@ a:hover {
   color: white;
 }
 
+.link-danger {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 .register-button {
+  margin-top: 20px;
+  height: 50px;
+  width: 220px;
   color: white;
   outline: 0;
+  border-radius: 6px;
   border: 2px solid currentcolor;
   border-color: dodgerblue;
   transition: 0.3s ease all;
-  background-color: dodgerblue;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 20px 15px;
-  margin-left: 100px;
-  display: inline-block;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  background-color: darkblue;
+  margin-left: 90px;
 }
 
 .register-button:hover {
   color: black;
-  border-color: transparent;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
 }
 
 .ımage-upload-button {
+  margin-top: 20px;
+  height: 50px;
+  width: 220px;
   color: white;
   outline: 0;
+  border-radius: 6px;
   border: 2px solid currentcolor;
   border-color: dodgerblue;
   transition: 0.3s ease all;
-  background-color: dodgerblue;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 20px 15px;
-  margin-left: 0px;
-  display: inline-block;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  background-color: darkblue;
+  margin-left: 90px;
 }
 
 .ımage-upload-button:hover {
   color: black;
-  border-color: transparent;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
 }
 
 .form-outline-Register {
   margin-top: 25px;
-  line-height: 1px;
+
   font-size: 15px;
-  font-weight: 600;
   color: aliceblue;
 }
 
-.register-view-body {
-  width: 700px;
-  height: 580px;
-  background-color: rgb(241, 138, 12);
-  border-radius: 30px;
-  border-color: black;
-  margin-top: 150px;
-  margin-bottom: 20px;
-  position: relative;
-  margin: auto;
-  line-height: 1px;
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
-}
-
-.input-date {
-  width: 190px;
-  height: 50px;
-}
-
-.form-outline-ımage {
-  background-color: whitesmoke;
-  width: 185px;
-  height: 50px;
-  text-align: center;
-
-}
-</style>
+.select-profile-photo {
+  height: 40px;
+  width: 220px;
+  border-radius: 4px;
+  border-color: white;
+  margin-left: 100px;
+}</style>
   

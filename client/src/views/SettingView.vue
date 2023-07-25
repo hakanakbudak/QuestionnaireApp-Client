@@ -9,7 +9,7 @@
 
       <div class="register-view-body">
         <h1>Setting</h1>
-        <form>
+        <form class="class-body">
 
           <table>
 
@@ -297,7 +297,7 @@ a:hover {
 .register-view-body {
   width: 700px;
   height: 580px;
-  background-color: rgb(241, 138, 12);
+  background-color: rgb(0, 9, 121, 1);
   border-radius: 30px;
   border-color: black;
   margin-top: 150px;
@@ -305,7 +305,6 @@ a:hover {
   position: relative;
   margin: auto;
   line-height: 1px;
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
 }
 
 .input-date {
@@ -319,5 +318,9 @@ a:hover {
     height: 50px;
     text-align: center;
     
+}
+
+.class-body{
+  background-color: dodgerblue;
 }
 </style>
