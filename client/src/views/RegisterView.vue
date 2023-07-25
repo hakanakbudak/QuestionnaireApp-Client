@@ -58,11 +58,10 @@
                   <input type="date" v-model="form.userBirthDate" id="form3Example3" />
                 </div>
               </td>
+
               <td>
-                <div class="form-outline-Register">
-                  <p>Select Profile Image</p>
-                  <input class="select-profile-photo" type="file" @change="handleFileUpload()" />
-                </div>
+                <p>Select Profile Photo</p>
+                <input class="select-profile-photo" type="file" @change="handleFileUpload" />
               </td>
             </tr>
             <tr>
@@ -74,11 +73,6 @@
                       <button @click="goToLoginpage()" class="link-danger">Login</button>
                     </p>
                   </div>
-                </div>
-              </td>
-              <td>
-                <div class="text-center text-lg-start mt-3">
-                  <button @click="uploadImage()" class="ımage-upload-button">Resim Yükle</button>
                 </div>
               </td>
             </tr>
@@ -107,6 +101,8 @@ export default {
         userEducation: "",
         file: null,
       },
+      file: null,
+      uploadStatus: "",
     };
   },
   methods: {
@@ -137,20 +133,33 @@ export default {
         path: "/login",
       });
     },
+
     handleFileUpload(event) {
       this.file = event.target.files[0];
     },
-    uploadFile() {
-      const formData = new FormData();
-      formData.append('file', this.file);
-      axios.post('http://localhost:3000/register', this.form)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
+
+
+    
+    async uploadImage() {
+      try {
+        const formData = new FormData();
+        formData.append("photo", this.file);
+
+        const response = await axios.post("http://localhost:3000/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", 
+          },
         });
-    }
+
+        this.uploadStatus = "Photo uploaded successfully";
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+        this.uploadStatus = "Failed to upload photo";
+      }
+    },
+
+
   }
 };
 </script>
@@ -261,5 +270,6 @@ a:hover {
   border-radius: 4px;
   border-color: white;
   margin-left: 100px;
-}</style>
+}
+</style>
   

@@ -2,17 +2,17 @@
   <div class="row">
 
     <div class="col-sm-3">
-      <SideBar/>
+      <div>
+        <SideBar />
+      </div>
     </div>
 
     <div class="col-sm-6">
 
       <div class="register-view-body">
         <h1>Setting</h1>
-        <form class="class-body">
-
+        <form>
           <table>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -20,7 +20,6 @@
                   <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Education</p>
@@ -28,7 +27,6 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -36,7 +34,6 @@
                   <input type="text" v-model="form.username" id="form3Example3" placeholder="Enter a valid username" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Job</p>
@@ -44,7 +41,6 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
@@ -52,7 +48,6 @@
                   <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>City</p>
@@ -60,61 +55,50 @@
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="form-outline-Register">
                   <p>Brith Date</p>
-                  <input class="input-date" type="date" v-model="form.userBirthDate" id="form3Example3" />
+                  <input type="date" v-model="form.userBirthDate" id="form3Example3" />
                 </div>
               </td>
-
               <td>
                 <div class="form-outline-Register">
                   <p>Select Profile Image</p>
-                  <input class="form-outline-ımage" type="file" @change="handleFileUpload" />
+                  <input class="select-profile-photo" type="file" @change="handleFileUpload()" />
                 </div>
               </td>
             </tr>
-
             <tr>
               <td>
                 <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="button" @click="update()" class="register-button">Update</button>
-                  <div class="login-link-text">
-                    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
-                      <a href="http://localhost:8080/login" class="link-danger">Login</a>
-                    </p>
-                  </div>
+                  <button type="button" @click="updateUserSetting()" class="register-button">Register</button>
                 </div>
               </td>
-
               <td>
                 <div class="text-center text-lg-start mt-3">
-                  <button @click="uploadImage" class="ımage-upload-button">Resim Yükle</button>
+                  <button @click="uploadImage()" class="ımage-upload-button">Resim Yükle</button>
                 </div>
               </td>
             </tr>
-
           </table>
-
         </form>
-
       </div>
     </div>
-
+    <div class="col-sm-3">
+    </div>
   </div>
 </template>
-
+  
 <script>
+import router from "../router";
 import axios from "axios";
 import SideBar from "../components/SideBar.vue"
+import jwt_decode from "jwt-decode";
 export default {
-
-  components:{
-    SideBar,
+  components: {
+    SideBar
   },
-
   data() {
     return {
       form: {
@@ -125,106 +109,119 @@ export default {
         userJob: "",
         userCity: "",
         userEducation: "",
+        file: null,
       },
-      selectedImage: null,
     };
   },
+
+  created() {
+    this.getUserSettings();
+  },
   methods: {
-
-    async update(_id) {
+    async getUserSettings() {
       try {
-        const { id } = this.$route.params;
-        const { email, username, password, userBirthDate, userJob,userCity,userEducation } = this.form;
+        const token = localStorage.getItem("access_token");
+        const decodedToken = jwt_decode(token);
+        const id = decodedToken._id;
 
-
-        const response = await axios.put(`http://localhost:3000/register/${id}`, {
-          email, username, password, userBirthDate, userJob,userCity,userEducation
+        const response = await axios.get(`http://localhost:3000/setting/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+        this.form = response.data
 
-        const updatedUser = response.data;
-
-        router.replace({
-          path: "/openpage",
-        });
-        console.log(updatedUser);
+        console.log(id)
+        console.log(response.data);
       } catch (error) {
-        console.log(error)
+        console.error(error);
       }
     },
 
-    register() {
-      axios
-        .post("http://localhost:3000/register", this.form, {
+    updateUserSetting() {
+      try {
+        const token = localStorage.getItem("access_token");
+        const decodedToken = jwt_decode(token);
+        const id = decodedToken._id;
+
+        const { email, username, password, userBirthDate, userJob, userCity, userEducation } = this.form;
+        const data = {
+          email,
+          username,
+          password,
+          userBirthDate,
+          userJob,
+          userCity,
+          userEducation
+        };
+
+        const response = axios.put(`http://localhost:3000/setting/${id}`, data, {
           headers: {
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: false,
-        })
-        .then(
-          (response) => {
-            console.log(response);
-            router.replace({
-              path: "/login",
+        });
+
+        response.then((res) => {
+          this.form = res.data; // response'dan gelen veriyi form veri modeline atayın
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    /*
+        handleFileUpload(event) {
+          this.file = event.target.files[0];
+        },
+        uploadFile() {
+          const formData = new FormData();
+          formData.append('file', this.file);
+          axios.post('http://localhost:3000/register', this.form)
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
             });
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
-    },
-
-    handleFileUpload(event) {
-      this.selectedImage = event.target.files[0];
-    },
-    uploadImage() {
-      const formData = new FormData();
-      formData.append('image', this.selectedImage);
-
-      // Yükleme için bir POST isteği göndermek için burada axios veya fetch gibi bir HTTP kütüphanesi kullanabilirsiniz.
-      // Örnek axios kullanımı:
-      // axios.post('http://example.com/upload', formData)
-      //   .then(response => {
-      //     // Yükleme başarılı oldu
-      //   })
-      //   .catch(error => {
-      //     // Yükleme sırasında hata oluştu
-      //   });
-    },
-
-  },
-
+        }
+        */
+  }
 };
 </script>
 
 <style>
-body {
-  background-color: aliceblue;
+.register-view-body {
+  width: 700px;
+  height: 580px;
+  background-color: rgb(241, 138, 12);
+  border-radius: 30px;
+  border-color: black;
+  margin-top: 150px;
+  margin-bottom: 20px;
+  position: relative;
+  margin: auto;
+  line-height: 1px;
+  background-color: dodgerblue;
 }
 
 input {
-  border-radius: 10px;
+  height: 40px;
+  width: 220px;
+  border-radius: 4px;
   border-color: white;
-  text-decoration: none;
-  padding: 8px 4px;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1px;
   margin-left: 100px;
 }
 
 h1 {
   margin-top: 60px;
-  margin-left: 130px;
-  line-height: 100px;
+  text-align: center;
+  ;
   color: white;
 }
 
 p {
   color: white;
   text-align: center;
-
 }
 
 a {
@@ -240,87 +237,61 @@ a:hover {
   color: white;
 }
 
+
+
 .register-button {
+  margin-top: 20px;
+  height: 50px;
+  width: 220px;
   color: white;
   outline: 0;
+  border-radius: 6px;
   border: 2px solid currentcolor;
   border-color: dodgerblue;
   transition: 0.3s ease all;
-  background-color: dodgerblue;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 20px 15px;
-  margin-left: 100px;
-  display: inline-block;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  background-color: darkblue;
+  margin-left: 90px;
 }
 
 .register-button:hover {
   color: black;
-  border-color: transparent;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
 }
 
 .ımage-upload-button {
+  margin-top: 20px;
+  height: 50px;
+  width: 220px;
   color: white;
   outline: 0;
+  border-radius: 6px;
   border: 2px solid currentcolor;
   border-color: dodgerblue;
   transition: 0.3s ease all;
-  background-color: dodgerblue;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 20px 15px;
-  margin-left: 0px;
-  display: inline-block;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  background-color: darkblue;
+  margin-left: 90px;
 }
 
 .ımage-upload-button:hover {
   color: black;
-  border-color: transparent;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
 }
 
 .form-outline-Register {
   margin-top: 25px;
-  line-height: 1px;
+
   font-size: 15px;
-  font-weight: 600;
   color: aliceblue;
 }
 
-.register-view-body {
-  width: 700px;
-  height: 580px;
-  background-color: rgb(0, 9, 121, 1);
-  border-radius: 30px;
-  border-color: black;
-  margin-top: 150px;
-  margin-bottom: 20px;
-  position: relative;
-  margin: auto;
-  line-height: 1px;
-}
-
-.input-date {
-  width: 190px;
-  height: 50px;
-}
-
-.form-outline-ımage{
-    background-color: whitesmoke;
-    width: 185px;
-    height: 50px;
-    text-align: center;
-    
-}
-
-.class-body{
-  background-color: dodgerblue;
+.select-profile-photo {
+  height: 40px;
+  width: 220px;
+  border-radius: 4px;
+  border-color: white;
+  margin-left: 100px;
 }
 </style>
+  

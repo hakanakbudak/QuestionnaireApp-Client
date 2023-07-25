@@ -133,6 +133,7 @@ export default {
             selectionARatio: 0,
             selectionBRatio: 0,
             selectionCRatio: 0,
+            surveyResults: {},
         }
     },
     created() {
@@ -140,6 +141,9 @@ export default {
         this.getData();
         this.getSurveyResults();
         this.fetchImageFromDatabase();
+
+
+
     },
     methods: {
         getData() {
@@ -204,6 +208,7 @@ export default {
                     router.replace({
                         path: `/questionnaire/update/${_id}`,
                     });
+
             }
             catch (error) {
                 console.log(error)
@@ -254,6 +259,7 @@ export default {
             this.isCommentShow = false;
 
         },
+
         async handleSelection(selectionId, questionnaireId) {
             try {
                 this.selectedQuestionnaireId = questionnaireId;
@@ -267,6 +273,8 @@ export default {
                 console.error(error);
             }
         },
+
+
         async getSurveyResults() {
             try {
                 const response = await axios.get("http://localhost:3000/getSurveyResults");
@@ -277,6 +285,10 @@ export default {
                 console.error(error);
             }
         },
+
+
+
+
     }
 };
 </script>

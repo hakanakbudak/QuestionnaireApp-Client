@@ -82,10 +82,11 @@ export default {
           question,
           category
         });
-        const updatedQuestionnaire = response.data;
+        //const updatedQuestionnaire = response.data;
         router.replace({
           path: "/questionnaire",
         });
+        this.questionnaire=response.data
         console.log(updatedQuestionnaire);
       } catch (error) {
         console.log(error)

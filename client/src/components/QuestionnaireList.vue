@@ -135,7 +135,6 @@ export default {
     created() {
         this.getQuestionnaire();
         this.getSurveyResults();
-
     },
     methods: {
         async getQuestionnaire() {
@@ -173,23 +172,20 @@ export default {
         searchQuestionnaire() {
             axios.get('http://localhost:3000/search', { params: { searchQuery: this.searchQuery } })
                 .then(response => {
-                    // Arama sonuçlarını işleyin
+
                     this.questionnaires = response.data
                     console.log(response.data);
                 })
                 .catch(error => {
-                    // Hata durumunda işleme geçin
+
                     console.error(error);
                 });
         },
         commentSend(questionnaireId) {
-
             this.selectedQuestionnaireId = questionnaireId;
-
             try {
                 axios.post(`http://localhost:3000/questionnaire/comment/${questionnaireId}`, { comment: this.commented })
                     .then((response) => {
-
                         console.log(response);
                         this.openComment()
                     })
@@ -202,11 +198,8 @@ export default {
             }
         },
         async openComment(questionnaireId) {
-            // this.isCommentShow=true;
             this.isCommentShow = !this.isCommentShow;
-            //const questionnaireId = '64be67a0035b02ffa85ea15f';
             this.selectedQuestionnaireId = questionnaireId;
-
             try {
                 const commentResponse = await axios.get(`http://localhost:3000/questionnaire/${questionnaireId}/comment`);
                 this.comment = commentResponse.data;
@@ -216,7 +209,6 @@ export default {
         },
         commentClose() {
             this.isCommentShow = false;
-
         },
         async handleSelection(selectionId, questionnaireId) {
             try {
@@ -255,6 +247,7 @@ export default {
     margin-left: 10px;
     margin-top: 9px;
 }
+
 .search-area {
     margin-bottom: 0;
     width: 615px;
@@ -263,6 +256,7 @@ export default {
     z-index: 1;
     border-radius: 10px;
 }
+
 .search-button {
     width: 40px;
     height: 40px;
@@ -270,6 +264,7 @@ export default {
     border-radius: 50px;
     border-color: dodgerblue;
 }
+
 .question-average-button {
     width: 530px;
     height: 34px;
@@ -280,24 +275,29 @@ export default {
     visibility: visible;
 
 }
+
 .question-average-button:hover {
     background-color: rgba(94, 85, 85, 0.493);
     border-color: black;
     border-width: 1px;
     border-radius: 10px;
 }
+
 .number-text {
     visibility: visible;
     margin-top: 3px;
 }
+
 .popup-open-button {
     background-color: rgb(16, 214, 16);
     border-radius: 4px;
     color: white;
 }
+
 .popup-open-button:hover {
     background-color: rgba(0, 128, 0, 0.671);
 }
+
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -310,6 +310,7 @@ export default {
     align-items: center;
     z-index: 4;
 }
+
 .popup-content {
     background-color: white;
     padding: 20px;
@@ -317,14 +318,17 @@ export default {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 4;
 }
+
 .popup-content h2 {
     margin-top: 0;
     z-index: 4;
 }
+
 .popup-content p {
     margin-bottom: 20px;
     z-index: 4;
 }
+
 .popup-content button {
     padding: 10px 20px;
 
@@ -334,27 +338,34 @@ export default {
     cursor: pointer;
     z-index: 4;
 }
+
 .popup-open-button {
     background-color: rgb(16, 214, 16);
     border-radius: 4px;
     color: white;
 }
+
 .popup-open-button:hover {
     background-color: rgba(0, 128, 0, 0.671);
 }
+
 .popup-close-button {
     background-color: rgb(212, 22, 22);
 }
+
 .popup-close-button:hover {
     border-width: 2px;
     background-color: rgba(212, 22, 22, 0.762);
 }
+
 .popup-yes-button {
     background-color: rgb(16, 214, 16);
 }
+
 .popup-yes-button:hover {
     background-color: rgba(16, 214, 16, 0.763);
 }
+
 .question-shared-date {
     font-size: 10px;
 }
