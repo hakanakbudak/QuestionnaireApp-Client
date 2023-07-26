@@ -79,16 +79,16 @@ export default {
     
     methods: {
         openSidebar() {
-            //document.getElementById("sideBar").style.width = "250px";
-            //document.getElementById("main").style.marginLeft = "250px";
-            this.sideBarStyle.width = '250px';
-            this.sideBarStyle.marginLeft = '250px';
+            document.getElementById("sideBar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            //this.sideBarStyle.width = '250px';
+            //this.sideBarStyle.marginLeft = '250px';
         },
         closeSidebar() {
-            //document.getElementById("sideBar").style.width = "0";
-            //document.getElementById("main").style.marginLeft = "0";
-            this.sideBarStyle.width = '0px';
-            this.sideBarStyle.marginLeft = '0px';
+            document.getElementById("sideBar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            //this.sideBarStyle.width = '0px';
+            //this.sideBarStyle.marginLeft = '0px';
         },
         logoutButton() {
             localStorage.clear()
@@ -219,5 +219,13 @@ body {
 }
 .home-button {
     background-color: transparent;
+    border-color: transparent;
+    font-size: 20px;
+}
+.home-button :hover{
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 20px;
+    color: aquamarine;
 }
 </style>

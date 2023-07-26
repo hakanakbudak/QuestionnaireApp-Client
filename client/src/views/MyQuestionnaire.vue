@@ -11,6 +11,7 @@
                     <input class="search-bar" v-model="searchQuery" type="search" placeholder="Search...">
                     <button type="search" @click="searchQuestionnaire()" class="search-button">S</button>
                 </div>
+
                 <div v-for="questionnaire in questionnaires" :key="questionnaire._id" class="card my-4">
                     <div class="card">
                         <div class="card-body">
@@ -23,6 +24,7 @@
                                 <li class="list-group-item">
                                     <h5>{{ questionnaire.question }}</h5>
                                 </li>
+
                                 <li class="list-group-item">{{ questionnaire.selectionOne }} <br>
 
                                     <button id="questionOneButton" :style="buttonStyle" class="question-average-button"
@@ -45,6 +47,7 @@
                                             %{{ selectionCRatio }} </p>
                                     </button>
                                 </li>
+                                
                             </ul>
                             <br>
                             <div>
@@ -109,7 +112,6 @@ import jwt_decode from "jwt-decode";
 export default {
     components: {
         SideBar,
-
     },
     data() {
         return {
@@ -141,9 +143,6 @@ export default {
         this.getData();
         this.getSurveyResults();
         this.fetchImageFromDatabase();
-
-
-
     },
     methods: {
         getData() {
@@ -268,13 +267,11 @@ export default {
                 const userId = decodedToken._id;
                 console.log(token)
                 await axios.post("http://localhost:3000/submitVote", { selectionId, questionnaireId, userId });
-                this.getSurveyResults();
+                this.getSurveyResults(questionnaireId);
             } catch (error) {
                 console.error(error);
             }
         },
-
-
         async getSurveyResults() {
             try {
                 const response = await axios.get("http://localhost:3000/getSurveyResults");
@@ -285,10 +282,6 @@ export default {
                 console.error(error);
             }
         },
-
-
-
-
     }
 };
 </script>
