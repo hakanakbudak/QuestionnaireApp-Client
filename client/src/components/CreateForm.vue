@@ -114,7 +114,11 @@ export default {
 }
 .form-control {
     width: 500px;
+    background-color: transparent;
+    border-width: 2px;
+    color: white;
 }
+
 .btn {
     width: 500px;
     
@@ -122,6 +126,9 @@ export default {
 .form-title {
     font-size: 60px;
     font-style: oblique;
+    color: white;
+    
     
 }
+
 </style>

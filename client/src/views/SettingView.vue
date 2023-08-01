@@ -63,21 +63,13 @@
                 </div>
               </td>
               <td>
-                <div class="form-outline-Register">
-                  <p>Select Profile Image</p>
-                  <input class="select-profile-photo" type="file" @change="handleFileUpload()" />
-                </div>
+                
               </td>
             </tr>
             <tr>
               <td>
                 <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="button" @click="updateUserSetting()" class="register-button">Register</button>
-                </div>
-              </td>
-              <td>
-                <div class="text-center text-lg-start mt-3">
-                  <button @click="uploadImage()" class="ımage-upload-button">Resim Yükle</button>
+                  <button type="button" @click="updateUserSetting()" class="register-button">Settings save </button>
                 </div>
               </td>
             </tr>
@@ -109,7 +101,6 @@ export default {
         userJob: "",
         userCity: "",
         userEducation: "",
-        file: null,
       },
     };
   },
@@ -162,29 +153,12 @@ export default {
         });
 
         response.then((res) => {
-          this.form = res.data; // response'dan gelen veriyi form veri modeline atayın
+          this.form = res.data; 
         });
       } catch (error) {
         console.log(error);
       }
     },
-
-    /*
-        handleFileUpload(event) {
-          this.file = event.target.files[0];
-        },
-        uploadFile() {
-          const formData = new FormData();
-          formData.append('file', this.file);
-          axios.post('http://localhost:3000/register', this.form)
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-        */
   }
 };
 </script>
@@ -201,7 +175,7 @@ export default {
   position: relative;
   margin: auto;
   line-height: 1px;
-  background-color: dodgerblue;
+  background-color: transparent;
 }
 
 input {

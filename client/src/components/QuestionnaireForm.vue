@@ -102,6 +102,7 @@ export default {
   height: 50px;
 }
 .form-control{
+  background-color: transparent;
   width: 500px;
 }
 .btn{

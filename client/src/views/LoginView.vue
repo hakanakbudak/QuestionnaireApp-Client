@@ -4,7 +4,7 @@
     <div class="col-sm-6">
       <div class="login-view-body">
         <form>
-          <h1>Login</h1>
+          <h1 class="login-text">Login</h1><br>
           <tr>
             <div class="form-outline-Login">
               <p class="p-text">Email Addres</p>
@@ -99,7 +99,7 @@ h1 {
 }
 
 .login-view-body {
-  background-color: dodgerblue;
+  background-color: transparent;
   border-radius: 5px;
   margin: auto;
   width: 400px;
@@ -143,5 +143,10 @@ h1 {
 
 .link-danger {
   color: white;
+}
+
+.login-text{
+  margin-left: 125px;
+  font-size: 70px;
 }
 </style>

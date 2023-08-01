@@ -47,14 +47,14 @@
                                             %{{ selectionCRatio }} </p>
                                     </button>
                                 </li>
-                                
+
                             </ul>
                             <br>
                             <div>
-                                <button type="button" @click="editQuestionnaire(questionnaire._id)" class="btn btn-primary">
+                                <button type="button" @click="editQuestionnaire(questionnaire._id)" class="btn-edit">
                                     Edit</button>
                                 <button type="button" @click="openPopup(questionnaire._id)"
-                                    class="btn btn-danger">Delete</button>
+                                    class="btn-delete">Delete</button>
                                 <div v-if="isPopupOpen" class="popup-overlay">
                                     <div class="popup-content">
                                         <h4 class="popup-title">{{ selectedQuestionnaireId }}</h4>
@@ -91,7 +91,7 @@
                                             <input type="text" v-model="commented.comment" class="comment-input-send"
                                                 placeholder="  comment..">
                                             <button type="button" class="comment-button-send"
-                                                @click="commentSend(questionnaire._id)">Send</button>
+                                                @click="commentSend(questionnaireId)">Send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -136,13 +136,14 @@ export default {
             selectionBRatio: 0,
             selectionCRatio: 0,
             surveyResults: {},
+
         }
     },
     created() {
         this.getMyQuestionnaires();
         this.getData();
         this.getSurveyResults();
-        this.fetchImageFromDatabase();
+
     },
     methods: {
         getData() {
@@ -174,10 +175,11 @@ export default {
                 const token = localStorage.getItem("access_token");
                 const decodedToken = jwt_decode(token);
                 const userId = decodedToken._id;
-                console.log(token)
                 const response = await axios.get(`http://localhost:3000/questionnaire/${userId}`);
                 this.questionnaires = response.data;
-                console.log(this.questionnaires);
+                router.replace({
+                    path: `/questionnaire/${userId}`,
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -227,13 +229,17 @@ export default {
             this.buttonStyle.height = '5px';
             this.isButtonShown = true;
         },
-        commentSend(questionnaireId) {
-            this.selectedQuestionnaireId = questionnaireId;
+        commentSend() {
             try {
-                axios.post(`http://localhost:3000/questionnaire/comment/${questionnaireId}`, { comment: this.commented })
+                const questionnaireId = this.selectedQuestionnaireId
+                console.log(questionnaireId)
+                const token = localStorage.getItem("access_token");
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken._id;
+                axios.post(`http://localhost:3000/questionnaire/comment/${userId}/${questionnaireId}`, { comment: this.commented.comment })
                     .then((response) => {
                         console.log(response);
-                        this.openComment(questionnaireId)
+                        this.getComment(questionnaireId);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -243,21 +249,23 @@ export default {
                 console.log(error);
             }
         },
-        async openComment(questionnaireId) {
-            this.isCommentShow = !this.isCommentShow;
-            this.selectedQuestionnaireId = questionnaireId;
 
+        async getComment(questionnaireId) {
             try {
+                this.selectedQuestionnaireId = questionnaireId;
                 const commentResponse = await axios.get(`http://localhost:3000/questionnaire/${questionnaireId}/comment`);
                 this.comment = commentResponse.data;
             } catch (error) {
                 console.error(error);
             }
         },
-        commentClose() {
-            this.isCommentShow = false;
 
+        async openComment(questionnaireId) {
+            this.isCommentShow = !this.isCommentShow;
+            this.selectedQuestionnaireId = questionnaireId;
+            await this.getComment(questionnaireId);
         },
+
 
         async handleSelection(selectionId, questionnaireId) {
             try {
@@ -287,10 +295,6 @@ export default {
 </script>
 
 <style>
-body {
-    background-color: rgb(196, 220, 224);
-}
-
 .search-bar {
     width: 540px;
     height: auto;
@@ -328,6 +332,39 @@ body {
     visibility: visible;
 
 }
+
+.btn-edit {
+    width: 280px;
+    height: 30px;
+    background-color: rgb(16, 214, 16);
+    border-radius: 5px;
+}
+
+.btn-edit :hover {
+    width: 280px;
+    height: 30px;
+    background-color: rgb(16, 214, 16);
+    border-radius: 5px;
+}
+
+
+.btn-delete {
+    width: 285px;
+    height: 30px;
+    background-color: red;
+    border-radius: 5px;
+    margin-left: 1px;
+}
+
+.btn-delete:hover {
+    width: 285px;
+    height: 30px;
+    background-color: red;
+    border-radius: 5px;
+    margin-left: 1px;
+}
+
+
 
 .question-average-button:hover {
     background-color: rgba(94, 85, 85, 0.493);

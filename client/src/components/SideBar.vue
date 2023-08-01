@@ -6,8 +6,8 @@
                     <table class="table-body">
                         <tr>
                             <td>
-                                <div id="main"  class="open-side-bar">
-                                    <span  @click="openSidebar()">
+                                <div id="main" class="open-side-bar">
+                                    <span @click="openSidebar()">
                                         &#9776;
                                     </span>
                                 </div>
@@ -22,17 +22,17 @@
                         </tr>
                         <tr>
                             <td>
-                                <img class="profile-image"
-                                    src="https://www.gentas.com.tr/wp-content/uploads/2021/05/3190-siyah_renk_g483_1250x1000_t3cksofn.jpg">
-                                <p class="profileUsername">bluesauer</p>
+                                <img class="app-icon" src="https://cdn-icons-png.flaticon.com/512/1169/1169549.png">
+                                <p class="profileUsername">{{ userName }}</p>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <button class="home-button" @click="goToHome()">Home Page</button><br>
-                                <button class="home-button" @click="goToQuestionnaireCreate()">Create Questionnaire</button><br>
-                                <button class="home-button" @click="goToMyQuestionnaire()">My Questionnaires</button><br>
-                                <button class="home-button" @click="goToSetting()">Setting</button>    <br>
+                                <button class="menu-button" @click="goToHome()">Home Page</button><br>
+                                <button class="menu-button" @click="goToQuestionnaireCreate()">Create
+                                    Questionnaire</button><br>
+                                <button class="menu-button" @click="goToMyQuestionnaire()">My Questionnaires</button><br>
+                                <button class="menu-button" @click="goToSetting()">Setting</button> <br>
                             </td>
                         </tr>
                         <tr>
@@ -63,20 +63,27 @@
 
 import router from "../router";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+
 
 export default {
 
-    data(){
-        return{
+    data() {
+        return {
             sideBarStyle: {
-                width:'width:250px',
-                marginLeft:'marginLeft:250px'
+                width: 'width:250px',
+                marginLeft: 'marginLeft:250px'
             },
-            
+            userName: ""
+
         }
     },
 
-    
+    created() {
+        this.getUserName()
+    },
+
+
     methods: {
         openSidebar() {
             document.getElementById("sideBar").style.width = "250px";
@@ -98,30 +105,37 @@ export default {
         },
         loginViewButton() {
             router.replace({
-                path: "/questionnaire/:userId",
+                path: "/questionnaire",
             });
         },
-        goToHome(){
+        goToHome() {
             router.replace({
-                path:"/questionnaire"
+                path: "/questionnaire"
             })
 
         },
-        goToQuestionnaireCreate(){
+        goToQuestionnaireCreate() {
             router.replace({
-                path:"/questionnaire/create/:id"
+                path: "/questionnaire/create/:id"
             })
         },
-        goToMyQuestionnaire(){
+        goToMyQuestionnaire() {
             router.replace({
-               path:"/questionnaire/:userId"
+                path: "/questionnaire/:userId"
             })
         },
-        goToSetting(){
+        goToSetting() {
             router.replace({
-                path:"/setting"
+                path: "/setting"
             })
         },
+
+        getUserName() {
+            const token = localStorage.getItem("access_token");
+            const decodedToken = jwt_decode(token);
+            const userId = decodedToken._id;
+            this.userName = userId
+        }
     }
 }
 </script>
@@ -130,19 +144,21 @@ export default {
 body {
     border-top-left-radius: 100px;
 }
+
 .side-nav {
     height: 900px;
     width: 0;
-    position:fixed;
+    position: fixed;
     z-index: 1;
     top: 0;
-    left:0;
+    left: 0;
     background-color: rgb(0, 9, 121, 1);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-    
+
 }
+
 .side-nav a {
     padding: 1px 1px 5px 6px;
     text-decoration: none;
@@ -151,9 +167,11 @@ body {
     display: block;
 
 }
+
 .side-nav a:hover {
     color: rgb(236, 146, 21);
 }
+
 .side-nav .close-side-bar {
     position: absolute;
     top: 0;
@@ -161,6 +179,7 @@ body {
     font-size: 36px;
     margin-left: 50px;
 }
+
 #main {
     transition: margin-left .5s;
     padding: 16px;
@@ -169,6 +188,7 @@ body {
     height: 70px;
 
 }
+
 @media screen and (max-height: 450px) {
     .side-nav {
         padding-top: 15px;
@@ -178,29 +198,39 @@ body {
         font-size: 18px;
     }
 }
+
 .open-side-bar {
     font-size: 30px;
     cursor: pointer;
     position: fixed;
 }
+
 .table-body {
     margin-left: auto;
     margin-right: auto;
 }
-.profile-image {
-    width: 100px;
-    height: 100px;
-    margin-top: 5px;
-    margin-left: auto;
-    margin-right: auto;
-}
-.logout-button {
+
+.app-icon {
     width: 150px;
+    height: 150px;
+    margin-top: 5px;
+    margin-left: 25px;
+    margin-right: auto;
+    border-image: 20px;
+    border-radius: 10px;
+    border: 1px solid dodgerblue;
+    
+    
+
+}
+
+.logout-button {
+    width: 200px;
     height: 50px;
     color: white;
     outline: 0;
     border: 2px solid currentcolor;
-    border-color: darkslateblue;
+    border-color: cornflowerblue;
     transition: 0.3s ease all;
     background-color: rgba(71, 61, 139, 0.705);
     font-size: 15px;
@@ -208,24 +238,26 @@ body {
     padding: 6px 15px;
     display: inline-block;
 }
+
 .logout-button:hover {
     color: white;
     border-color: transparent;
     background-color: dodgerblue;
     border-radius: 8px;
 }
+
 .profileUsername {
     color: aliceblue;
 }
-.home-button {
+
+.menu-button {
     background-color: transparent;
     border-color: transparent;
-    font-size: 20px;
+    color: whitesmoke;
+
 }
-.home-button :hover{
-    background-color: transparent;
-    border-color: transparent;
-    font-size: 20px;
-    color: aquamarine;
+
+.menu-button:hover {
+    background-color: dodgerblue;
 }
 </style>

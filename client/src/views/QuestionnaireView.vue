@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <SideBar />
+          
         </div>
         <div>
             <QuestionnaireList/>
@@ -10,13 +10,11 @@
 </template>
   
 <script>
-import SideBar from "../components/SideBar.vue"
 import QuestionnaireList from "@/components/QuestionnaireList.vue";
 import axios from 'axios';
 export default {
     components: {
         QuestionnaireList,
-    SideBar,
 },
     data() {
         return {

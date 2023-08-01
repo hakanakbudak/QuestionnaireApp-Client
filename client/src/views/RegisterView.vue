@@ -6,20 +6,20 @@
     <div class="col-sm-6">
 
       <div class="register-view-body">
-        <h1>Register</h1>
+        <h1 class="register-text">Register</h1>
         <form>
           <table>
             <tr>
               <td>
                 <div class="form-outline-Register">
                   <p>Email Addres</p>
-                  <input type="email" v-model="form.email" id="form3Example3" placeholder="Enter a valid email address" />
+                  <input type="email" v-model="form.email" id="formExample1" placeholder="Enter a valid email address" />
                 </div>
               </td>
               <td>
                 <div class="form-outline-Register">
                   <p>Education</p>
-                  <input type="text" v-model="form.userEducation" id="form3Example4" placeholder="Education" />
+                  <input type="text" v-model="form.userEducation" id="formExample2" placeholder="Education" />
                 </div>
               </td>
             </tr>
@@ -27,13 +27,13 @@
               <td>
                 <div class="form-outline-Register">
                   <p>Username</p>
-                  <input type="text" v-model="form.username" id="form3Example3" placeholder="Enter a valid username" />
+                  <input type="text" v-model="form.username" id="formExample3"  placeholder="Enter a valid username" />
                 </div>
               </td>
               <td>
                 <div class="form-outline-Register">
                   <p>Job</p>
-                  <input type="text" v-model="form.userJob" id="form3Example3" placeholder=" Job" />
+                  <input type="text" v-model="form.userJob" id="formExample4" placeholder=" Job" />
                 </div>
               </td>
             </tr>
@@ -41,13 +41,13 @@
               <td>
                 <div class="form-outline-Register">
                   <p>Password</p>
-                  <input type="password" v-model="form.password" id="form3Example4" placeholder="Enter password" />
+                  <input type="password" v-model="form.password" autocomplete="current-password" id="formExample5" placeholder="Enter password" />
                 </div>
               </td>
               <td>
                 <div class="form-outline-Register">
                   <p>City</p>
-                  <input type="text" v-model="form.userCity" id="form3Example4" placeholder="City" />
+                  <input type="text" v-model="form.userCity" id="formExample6" placeholder="City" />
                 </div>
               </td>
             </tr>
@@ -55,13 +55,13 @@
               <td>
                 <div class="form-outline-Register">
                   <p>Brith Date</p>
-                  <input type="date" v-model="form.userBirthDate" id="form3Example3" />
+                  <input type="date" v-model="form.userBirthDate" id="formExample7" />
                 </div>
               </td>
-
               <td>
-                <p>Select Profile Photo</p>
-                <input class="select-profile-photo" type="file" @change="handleFileUpload" />
+                <div class="form-outline-Register">
+
+                </div>
               </td>
             </tr>
             <tr>
@@ -99,13 +99,11 @@ export default {
         userJob: "",
         userCity: "",
         userEducation: "",
-        file: null,
       },
-      file: null,
-      uploadStatus: "",
     };
   },
   methods: {
+
     register() {
       axios
         .post("http://localhost:3000/register", this.form, {
@@ -128,43 +126,20 @@ export default {
           }
         )
     },
+
     goToLoginpage() {
       router.replace({
         path: "/login",
       });
     },
 
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-    },
-
-
-    
-    async uploadImage() {
-      try {
-        const formData = new FormData();
-        formData.append("photo", this.file);
-
-        const response = await axios.post("http://localhost:3000/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data", 
-          },
-        });
-
-        this.uploadStatus = "Photo uploaded successfully";
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-        this.uploadStatus = "Failed to upload photo";
-      }
-    },
-
-
   }
 };
 </script>
 
 <style>
+
+
 .register-view-body {
   width: 700px;
   height: 580px;
@@ -176,7 +151,7 @@ export default {
   position: relative;
   margin: auto;
   line-height: 1px;
-  background-color: dodgerblue;
+  background-color: transparent;
 }
 
 input {
@@ -188,9 +163,9 @@ input {
 }
 
 h1 {
+  font-size:70px;
   margin-top: 60px;
-  text-align: center;
-  ;
+  margin-left: 100px;
   color: white;
 }
 
@@ -210,6 +185,10 @@ a {
 
 a:hover {
   color: white;
+}
+
+.register-text{
+  margin-top: 70px;
 }
 
 .link-danger {

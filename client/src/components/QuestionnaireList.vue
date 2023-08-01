@@ -56,7 +56,7 @@
                                         <h6></h6>
                                         <p class="popup-text">Anketi silmek istediğinize emin misiniz?</p>
                                         <button class="popup-close-button" @click="closePopup()">No</button>
-                                        <button class="popup-yes-button" @click="removeQuestionnaire">Yes</button>
+                                        <button class="popup-yes-button" @click="removeQuestionnaire()">Yes</button>
                                     </div>
                                 </div>
                             </div>
@@ -77,15 +77,28 @@
                                             <br>
                                             <div v-for="comment in comment" :key="comment._id">
                                                 <div>
-                                                    {{ comment.comment }}
-                                                </div>
+                                                    <table class="comment-table-body">
+                                                        <tr>
+                                                            <div class="show-delete">
+
+                                                                <th>{{ comment._id }}</th> <span></span>
+                                                                <td>
+                                                                    <p>{{ comment.comment }} </p>
+                                                                </td>
+                                                                <button @click="commentDelete()"
+                                                                    class="overlay-button">Delete</button>
+
+                                                            </div>
+                                                        </tr>
+                                                    </table>
+                                                </div><br>
                                             </div>
                                         </div>
                                         <div id="comment-button-close">
                                             <input type="text" v-model="commented.comment" class="comment-input-send"
                                                 placeholder="  comment..">
                                             <button type="button" class="comment-button-send"
-                                                @click="commentSend(questionnaire._id)">Send</button>
+                                                @click="commentSend(questionnaireId)">Send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -130,6 +143,7 @@ export default {
             selectionARatio: 0,
             selectionBRatio: 0,
             selectionCRatio: 0,
+            selectedCommentId: null
         }
     },
     created() {
@@ -159,7 +173,7 @@ export default {
                 .then(
                     (res) => {
                         this.result = res.data;
-                        console.log("data get succesfully");
+                        console.log("Data get succesfully");
                     },
                     (error) => {
                         console.log(error);
@@ -177,17 +191,19 @@ export default {
                     console.log(response.data);
                 })
                 .catch(error => {
-
                     console.error(error);
                 });
         },
-        commentSend(questionnaireId) {
-            this.selectedQuestionnaireId = questionnaireId;
+        commentSend() {
             try {
-                axios.post(`http://localhost:3000/questionnaire/comment/${questionnaireId}`, { comment: this.commented })
+                const questionnaireId = this.selectedQuestionnaireId
+                console.log(questionnaireId)
+                const token = localStorage.getItem("access_token");
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken._id;
+                axios.post(`http://localhost:3000/questionnaire/comment/${userId}/${questionnaireId}`, { comment: this.commented.comment })
                     .then((response) => {
-                        console.log(response);
-                        this.openComment()
+                        this.getComment(questionnaireId);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -197,32 +213,38 @@ export default {
                 console.log(error);
             }
         },
-        async openComment(questionnaireId) {
-            this.isCommentShow = !this.isCommentShow;
-            this.selectedQuestionnaireId = questionnaireId;
+
+        async getComment(questionnaireId) {
             try {
+                this.selectedQuestionnaireId = questionnaireId;
                 const commentResponse = await axios.get(`http://localhost:3000/questionnaire/${questionnaireId}/comment`);
                 this.comment = commentResponse.data;
             } catch (error) {
                 console.error(error);
             }
         },
-        commentClose() {
-            this.isCommentShow = false;
+
+        async openComment(questionnaireId) {
+            this.isCommentShow = !this.isCommentShow;
+            this.selectedQuestionnaireId = questionnaireId;
+            await this.getComment(questionnaireId);
         },
+
         async handleSelection(selectionId, questionnaireId) {
+            console.log(questionnaireId)
             try {
                 this.selectedQuestionnaireId = questionnaireId;
                 const token = localStorage.getItem("access_token");
                 const decodedToken = jwt_decode(token);
                 const userId = decodedToken._id;
-                console.log(token)
+                console.log(userId)
                 await axios.post("http://localhost:3000/submitVote", { selectionId, questionnaireId, userId });
-                this.getSurveyResults();
+                this.getSurveyResults(questionnaireId);
             } catch (error) {
                 console.error(error);
             }
         },
+
         async getSurveyResults() {
             try {
                 const response = await axios.get("http://localhost:3000/getSurveyResults");
@@ -233,6 +255,18 @@ export default {
                 console.error(error);
             }
         },
+        
+        async commentDelete() {
+            try {
+                const response = await axios.delete(`http://localhost:3000/questionnaire/comment/${this.selectedCommentId}`);
+                console.log(this.selectedCommentId)
+                console.log(response.data.message); // İşlem sonucu API'den gelen mesajı konsola yazdırabiliriz
+                console.log('yorum tamamen silindi')
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
     },
 };
 </script>
@@ -267,20 +301,21 @@ export default {
 
 .question-average-button {
     width: 530px;
-    height: 34px;
-    background-color: gray;
-    border-color: black;
+    height: auto;
+    background-color: rgb(182, 176, 176);
+    border-color: transparent;
     border-width: 1px;
     transition: 0.5s;
     visibility: visible;
+    border-radius: 10px;
 
 }
 
 .question-average-button:hover {
-    background-color: rgba(94, 85, 85, 0.493);
-    border-color: black;
+    background-color: rgb(52, 52, 146);
+    border-color: transparent;
     border-width: 1px;
-    border-radius: 10px;
+    
 }
 
 .number-text {
@@ -370,20 +405,6 @@ export default {
     font-size: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .comment-nav {
     height: 10px;
     width: 10px;
@@ -457,6 +478,33 @@ export default {
 
 .close-button-position {
     position: fixed;
+}
+
+.comment-table-body {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.show-delete {
+    position: relative;
+    display: inline-block;
+}
+
+.overlay-button {
+    width: 90px;
+    height: 74px;
+    position: absolute;
+    top: 55%;
+    left: 134%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: red;
+}
+
+.show-delete:hover .overlay-button {
+    opacity: 1;
+    pointer-events: auto;
 }
 </style>
 
