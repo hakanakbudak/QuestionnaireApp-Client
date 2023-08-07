@@ -4,7 +4,7 @@
           
         </div>
         <div>
-            <QuestionnaireList/>
+            <QuestionnaireList :questionnaires="questionnaires"/>
         </div>
     </div>
 </template>
@@ -18,15 +18,15 @@ export default {
 },
     data() {
         return {
-            questionnaires: [],           
+            questionnaires: [],  
         };
     },
     created(){
-        this.getPersons()
+        this.getQuestionnaires()
         
     },
     methods: {
-        async getPersons() {
+        async getQuestionnaires() {
             try {
                 const response = await axios.get(`http://localhost:3000/questionnaire`)
                 this.questionnaires = response.data
@@ -43,7 +43,7 @@ export default {
 
 
                 response.then((res) => {
-                    this.person = res.data // response'dan gelen veriyi person veri modeline atayın
+                    this.person = res.data
                 })
             } catch (error) {
                 console.log(error)

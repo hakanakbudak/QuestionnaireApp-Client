@@ -18,8 +18,8 @@
                             <ul class="list-group list-group-vertical">
                                 <li class="list-group-item">
                                     <h2 class="card-title">{{ questionnaire.category }}</h2>
-                                    <button class="popup-open-button" @click="openComment(questionnaire._id)">Yorum
-                                        Yap</button>
+                                    <Comment :questionnaireId="questionnaire._id"
+                                            @someEvent="handleCommentEvent"></Comment>
                                 </li>
                                 <li class="list-group-item">
                                     <h5>{{ questionnaire.question }}</h5>
@@ -71,33 +71,7 @@
             </div>
             <div class="col-sm-3">
                 <div>
-                    <div class="container contact-form">
-                        <form method="post">
-                            <div class="row">
-                                <div class="col-md-5" v-show="isCommentShow">
-                                    <div id="comment-nav" class="comment-nav">
-                                        <div id="comment-list-close" class="comment-body">
-                                            <div class="close-button-position">
-                                            </div>
-                                            <br>
-                                            <div v-for="comment in comment" :key="comment._id">
-                                                <div>
-                                                    {{ comment.comment }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="comment-button-close">
-
-                                            <input type="text" v-model="commented.comment" class="comment-input-send"
-                                                placeholder="  comment..">
-                                            <button type="button" class="comment-button-send"
-                                                @click="commentSend(questionnaireId)">Send</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -108,11 +82,24 @@
 import router from "../router";
 import axios from "axios";
 import SideBar from "../components/SideBar.vue"
+import Comment from "../components/Comment.vue";
 import jwt_decode from "jwt-decode";
 export default {
+    
     components: {
         SideBar,
+        Comment
+        
     },
+
+    props: {
+        questionnaireId: {
+            type: String,
+            required: true,
+            default: 0,
+        },
+    },
+    
     data() {
         return {
             questionnaires: [],
@@ -125,10 +112,6 @@ export default {
             isPopupOpen: false,
             selectedQuestionnaireId: null,
             isCommentShow: false,
-            comment: [],
-            commented: {
-                comment: "",
-            },
             isCommentShow: false,
             selectedQuestionnaireId: null,
             questionnaire: null,
@@ -136,7 +119,6 @@ export default {
             selectionBRatio: 0,
             selectionCRatio: 0,
             surveyResults: {},
-
         }
     },
     created() {
@@ -194,13 +176,16 @@ export default {
                 console.log(error);
             }
         },
+
         openPopup(_id) {
             this.selectedQuestionnaireId = _id;
             this.isPopupOpen = true;
         },
+
         closePopup() {
             this.isPopupOpen = false;
         },
+        
         editQuestionnaire(_id, selectionOne, selectionTwo, selectionThree, category, questionnaireDate) {
             try {
                 const response = axios.get(`http://localhost:3000/questionnaire/${_id}`, { selectionOne, selectionTwo, selectionThree, category, questionnaireDate })
@@ -225,42 +210,13 @@ export default {
                     console.error(error);
                 });
         },
+
         questionButton() {
             this.buttonStyle.height = '5px';
             this.isButtonShown = true;
-        },
-        commentSend() {
-            try {
-                const questionnaireId = this.selectedQuestionnaireId
-                console.log(questionnaireId)
-                const token = localStorage.getItem("access_token");
-                const decodedToken = jwt_decode(token);
-                const userId = decodedToken._id;
-                axios.post(`http://localhost:3000/questionnaire/comment/${userId}/${questionnaireId}`, { comment: this.commented.comment })
-                    .then((response) => {
-                        console.log(response);
-                        this.getComment(questionnaireId);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                return
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        },    
 
-        async getComment(questionnaireId) {
-            try {
-                this.selectedQuestionnaireId = questionnaireId;
-                const commentResponse = await axios.get(`http://localhost:3000/questionnaire/${questionnaireId}/comment`);
-                this.comment = commentResponse.data;
-            } catch (error) {
-                console.error(error);
-            }
-        },
-
-        async openComment(questionnaireId) {
+        async handleCommentEvent(questionnaireId) {
             this.isCommentShow = !this.isCommentShow;
             this.selectedQuestionnaireId = questionnaireId;
             await this.getComment(questionnaireId);
@@ -458,84 +414,5 @@ export default {
 }
 
 
-
-
-
-
-
-.comment-nav {
-    height: 10px;
-    width: 10px;
-    position: fixed;
-    z-index: 1;
-    overflow-x: visible;
-    transition: 0.5s;
-    padding-top: 60px;
-
-    visibility: visible;
-
-}
-
-.comment-body {
-    width: 350px;
-    height: 350px;
-    background-color: white;
-    border: 2px solid;
-    border-color: black;
-    position: fixed;
-    bottom: 40px;
-    border-radius: 5px;
-
-    overflow: scroll;
-    scrollbar-width: thin;
-
-    overflow-x: visible;
-
-}
-
-.comment-input-send {
-    width: 260px;
-    height: 30px;
-    position: fixed;
-    bottom: 3px;
-    margin-left: 3px;
-    border-radius: 15px;
-}
-
-.comment-button-send {
-    width: 60px;
-    height: 30px;
-    background-color: rgba(16, 214, 16, 0.649);
-    position: fixed;
-    bottom: 3px;
-    right: 143px;
-    border-radius: 15px;
-}
-
-.comment-button-send:hover {
-    background-color: rgb(16, 214, 16);
-    color: white;
-}
-
-.comment-button-close {
-    width: 330px;
-    height: 30px;
-    top: 0px;
-    background-color: rgb(226, 5, 5);
-    border-radius: 4px;
-    border-color: white;
-}
-
-.comment-button-close:hover {
-    background-color: red;
-    color: white;
-    width: 333px;
-    height: 33px;
-
-}
-
-.close-button-position {
-    position: fixed;
-}
 </style>
 

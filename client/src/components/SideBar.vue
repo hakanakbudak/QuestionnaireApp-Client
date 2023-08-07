@@ -2,6 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-3">
+                <div class="main-content">
                 <div id="sideBar" :style="sideBarStyle" class="side-nav">
                     <table class="table-body">
                         <tr>
@@ -55,6 +56,7 @@
                     </table>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </template>
@@ -75,7 +77,6 @@ export default {
                 marginLeft: 'marginLeft:250px'
             },
             userName: ""
-
         }
     },
 
@@ -83,19 +84,14 @@ export default {
         this.getUserName()
     },
 
-
     methods: {
         openSidebar() {
-            document.getElementById("sideBar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-            //this.sideBarStyle.width = '250px';
-            //this.sideBarStyle.marginLeft = '250px';
+            this.sideBarStyle.width = '250px';
+            this.sideBarStyle.marginLeft = '250px';
         },
         closeSidebar() {
-            document.getElementById("sideBar").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
-            //this.sideBarStyle.width = '0px';
-            //this.sideBarStyle.marginLeft = '0px';
+            this.sideBarStyle.width = '0px';
+            this.sideBarStyle.marginLeft = '0px';
         },
         logoutButton() {
             localStorage.clear()
@@ -156,7 +152,6 @@ body {
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-
 }
 
 .side-nav a {
@@ -165,7 +160,6 @@ body {
     font-size: 25px;
     color: white;
     display: block;
-
 }
 
 .side-nav a:hover {
@@ -180,13 +174,17 @@ body {
     margin-left: 50px;
 }
 
+.main-content{
+    padding-left: 0;
+    left: 0;
+}
+
 #main {
     transition: margin-left .5s;
     padding: 16px;
     background-color: rgba(220, 220, 220, 0.726);
     width: 60px;
     height: 70px;
-
 }
 
 @media screen and (max-height: 450px) {
@@ -219,9 +217,6 @@ body {
     border-image: 20px;
     border-radius: 10px;
     border: 1px solid dodgerblue;
-    
-    
-
 }
 
 .logout-button {
@@ -254,7 +249,6 @@ body {
     background-color: transparent;
     border-color: transparent;
     color: whitesmoke;
-
 }
 
 .menu-button:hover {

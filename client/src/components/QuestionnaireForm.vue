@@ -82,7 +82,6 @@ export default {
           question,
           category
         });
-        //const updatedQuestionnaire = response.data;
         router.replace({
           path: "/questionnaire",
         });

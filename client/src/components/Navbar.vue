@@ -1,8 +1,10 @@
 <template>
   <div>
     <nav class="navbar">
+      
       <div>
-        <button class="nav-bar-button" type="button" @click="loginViewButton()">Login</button>
+        <button class="nav-bar-button" type="button" @click="loginViewButton()">Login</button><span>.</span>
+        <button class="nav-bar-button" type="button" @click="registerViewButton()">Register</button>
       </div>
     </nav>
   </div>
@@ -18,13 +20,19 @@ export default {
         path: "/login",
       });
     },
+
+    registerViewButton(){
+      router.replace({
+        path: "/register",
+      });
+    }
   }
 }
 </script>
 
 <style>
 nav {
-  background: linear-gradient(90deg, rgb(2, 9, 121, 1) 20%, rgb(11, 134, 235) 45%, rgb(0, 9, 121, 1) 100%);
+  background-color: transparent;
   height: 60px;
 }
 .nav-bar-button {
@@ -33,13 +41,13 @@ nav {
   border: 2px solid currentcolor;
   border-color: darkblue;
   transition: 0.3s ease all;
-  background-color: rgba(220, 220, 220, 0.556);
+  background-color: transparent;
   font-size: 15px;
   font-weight: 600;
   padding: 10px 25px;
   display: inline-block;
   position: relative;
-  left: 1400px;
+  left: 1250px;
 }
 .nav-bar-button:hover {
   color: white;
